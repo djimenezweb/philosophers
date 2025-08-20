@@ -2,7 +2,8 @@ NAME		= philo
 CC			= cc
 CFLAGS		= -Wall -Werror -Wextra
 SRC_PATH	= src/
-SRC			=	main.c
+SRC			=	main.c \
+				atoi.c
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJS		= $(SRCS:.c=.o)
 INCLUDES	= -I./includes
@@ -30,9 +31,9 @@ re : fclean all
 
 run : all
 	@$(MAKE) clean
-	./$(NAME)
+	./$(NAME) 10 20 30 40 50
 
 check : all
-	valgrind ./$(NAME)
+	valgrind ./$(NAME) 10 20 30 40 50
 
 .PHONY : all clean fclean re run check
