@@ -1,12 +1,12 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 19:19:06 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/20 20:42:59 by danielji         ###   ########.fr       */
+/*   Created: 2025/08/21 09:42:37 by danielji          #+#    #+#             */
+/*   Updated: 2025/08/21 09:47:16 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -28,6 +28,7 @@ t_config	init_config(int argc, char *argv[])
 	return (config);
 }
 
+/* Returns a philosopher */
 t_philo	init_philo(int id)
 {
 	t_philo	p;
@@ -36,9 +37,10 @@ t_philo	init_philo(int id)
 	return (p);
 }
 
-t_philo	*init_array(int	n)
+/* Returns an array of philosophers */
+t_philo	*init_array(int n)
 {
-	int 	i;
+	int		i;
 	t_philo	*array;
 
 	array = (t_philo *)malloc(sizeof(t_philo) * n);
@@ -51,52 +53,4 @@ t_philo	*init_array(int	n)
 		i++;
 	}
 	return (array);
-}
-
-void	*routine(void *arg)
-{
-	t_philo	*p;
-
-	p = (t_philo *) arg;
-	printf("Philosopher %d says hello\n", p->id);
-	return (NULL);
-}
-
-void	create_threads(int n, t_philo	*array)
-{
-	int			i;
-	pthread_t	id;
-	
-	i = 0;	
-	while (i < n)
-	{
-		array[i].thread = id;
-		pthread_create(&id, NULL, routine, (void *) &array[i]);
-		pthread_join(id, NULL);
-		i++;
-	}
-}
-
-int	main(int argc, char *argv[])
-{
-	t_config	config;
-	t_philo		*array;
-
-	if (argc <= 4)
-		return (0);
-
-	config = init_config(argc, argv);
-	if (config.number > 0)
-		array = init_array(config.number);
-	else
-		return (0);
-/*	int i = 0;
-	while (i < config.number)
-	{
-		printf("id = %d\n", array[i].id);
-		i++;
-	} */
-	create_threads(config.number, array);
-	free(array);
-	return (0);
 }

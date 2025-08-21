@@ -1,43 +1,36 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 19:19:02 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/20 20:37:11 by danielji         ###   ########.fr       */
+/*   Created: 2025/08/20 19:19:06 by danielji          #+#    #+#             */
+/*   Updated: 2025/08/21 09:47:05 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "philo.h"
 
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-
-typedef struct s_config
+int	main(int argc, char *argv[])
 {
-	int	number;
-	int	tt_die;
-	int	tt_eat;
-	int	tt_sleep;
-	int	max_loops;
-}		t_config;
+	t_config	config;
+	t_philo		*array;
 
-typedef struct s_philo
-{
-	int			id;
-	pthread_t	thread;
-
-}	t_philo;
-
-/* atoi.c */
-
-int	ft_atoi(const char *str);
-
-#endif
+	if (argc <= 4)
+		return (0);
+	config = init_config(argc, argv);
+	if (config.number > 0)
+		array = init_array(config.number);
+	else
+		return (0);
+/*	int i = 0;
+	while (i < config.number)
+	{
+		printf("id = %d\n", array[i].id);
+		i++;
+	} */
+	create_threads(config.number, array);
+	free(array);
+	return (0);
+}

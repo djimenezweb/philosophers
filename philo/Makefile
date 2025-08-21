@@ -2,8 +2,11 @@ NAME		= philo
 CC			= cc
 CFLAGS		= -Wall -Werror -Wextra
 SRC_PATH	= src/
-SRC			=	main.c \
-				atoi.c
+SRC			=	atoi.c \
+				initialization.c \
+				main.c \
+				threads.c \
+				timestamps.c
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJS		= $(SRCS:.c=.o)
 INCLUDES	= -I./includes
