@@ -6,7 +6,7 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 09:44:37 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/21 10:48:04 by danielji         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:27:10 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -30,7 +30,7 @@ void	create_threads(int n, t_philo	*array)
 	while (i < n)
 	{
 		array[i].thread = id;
-		pthread_create(&id, NULL, routine, (void *) &array[i]);
+		pthread_create(&id, NULL, routine, (void *)&array[i]);
 		pthread_join(id, NULL);
 		i++;
 	}
