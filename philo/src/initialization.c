@@ -6,11 +6,11 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 09:42:37 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/21 09:47:16 by danielji         ###   ########.fr       */
+/*   Updated: 2025/08/21 10:32:13 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#include "philo.h"
+#include "philosophers.h"
 
 /* TO DO: Parse valid numbers (exclude text, negative numbers, etc) */
 t_config	init_config(int argc, char *argv[])

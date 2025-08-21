@@ -6,11 +6,11 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 19:19:06 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/21 09:47:05 by danielji         ###   ########.fr       */
+/*   Updated: 2025/08/21 10:52:35 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#include "philo.h"
+#include "philosophers.h"
 
 int	main(int argc, char *argv[])
 {
@@ -24,12 +24,6 @@ int	main(int argc, char *argv[])
 		array = init_array(config.number);
 	else
 		return (0);
-/*	int i = 0;
-	while (i < config.number)
-	{
-		printf("id = %d\n", array[i].id);
-		i++;
-	} */
 	create_threads(config.number, array);
 	free(array);
 	return (0);

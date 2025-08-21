@@ -1,17 +1,17 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 19:19:02 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/21 09:46:45 by danielji         ###   ########.fr       */
+/*   Updated: 2025/08/21 10:48:35 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILOSOPHERS_H
+# define PHILOSOPHERS_H
 
 # include <string.h>
 # include <stdio.h>
@@ -50,5 +50,9 @@ t_philo		*init_array(int n);
 
 void		*routine(void *arg);
 void		create_threads(int n, t_philo	*array);
+
+/* timestamps.c */
+
+void		timestamp(int id, char *str);
 
 #endif

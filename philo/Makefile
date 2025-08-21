@@ -1,4 +1,4 @@
-NAME		= philo
+NAME		= philosophers
 CC			= cc
 CFLAGS		= -Wall -Werror -Wextra
 SRC_PATH	= src/

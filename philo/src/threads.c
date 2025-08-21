@@ -6,18 +6,18 @@
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 09:44:37 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/21 09:47:38 by danielji         ###   ########.fr       */
+/*   Updated: 2025/08/21 10:48:04 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#include "philo.h"
+#include "philosophers.h"
 
 void	*routine(void *arg)
 {
 	t_philo	*p;
 
 	p = (t_philo *) arg;
-	printf("Philosopher %d says hello\n", p->id);
+	timestamp(p->id, "says hello");
 	return (NULL);
 }
 
