@@ -13,16 +13,17 @@
 #include "philosophers.h"
 
 /* Returns a philosopher */
-t_philo	init_philo(int id)
+t_philo	init_philo(t_config config, int id)
 {
 	t_philo	p;
 
 	p.id = id;
+	p.config = &config;
 	return (p);
 }
 
 /* Returns an array of philosophers */
-t_philo	*init_array(int n)
+t_philo	*init_array(t_config config, int n)
 {
 	int		i;
 	t_philo	*arr;
@@ -33,7 +34,7 @@ t_philo	*init_array(int n)
 	i = 0;
 	while (i < n)
 	{
-		arr[i] = init_philo(i + 1);
+		arr[i] = init_philo(config, i + 1);
 		i++;
 	}
 	return (arr);
@@ -52,6 +53,6 @@ t_config	init_config(int argc, char *argv[])
 		config.max_loops = ft_atoi(argv[5]);
 	else
 		config.max_loops = -1;
-	config.philo_array = init_array(config.number);
+	config.philo_array = init_array(config, config.number);
 	return (config);
 }

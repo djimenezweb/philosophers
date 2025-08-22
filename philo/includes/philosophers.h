@@ -22,9 +22,10 @@
 
 typedef struct s_philo
 {
-	int			id;
-	pthread_t	thread;
-}				t_philo;
+	int				id;
+	pthread_t		thread;
+	struct s_config	*config;
+}					t_philo;
 
 typedef struct s_config
 {
@@ -43,8 +44,8 @@ int			ft_atoi(const char *str);
 /* initialization.c */
 
 t_config	init_config(int argc, char *argv[]);
-t_philo		init_philo(int id);
-t_philo		*init_array(int n);
+t_philo		init_philo(t_config config, int id);
+t_philo		*init_array(t_config config, int n);
 
 /* threads.c */
 
