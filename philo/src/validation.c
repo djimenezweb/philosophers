@@ -1,37 +1,28 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads.c                                          :+:      :+:    :+:   */
+/*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 09:44:37 by danielji          #+#    #+#             */
-/*   Updated: 2025/08/22 11:02:49 by danielji         ###   ########.fr       */
+/*   Created: 2025/08/22 10:38:10 by danielji          #+#    #+#             */
+/*   Updated: 2025/08/22 11:06:28 by danielji         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "philosophers.h"
 
-void	*routine(void *arg)
+/* Checks if passed arguments are valid numbers. */
+int	arg_validation(int argc, char *argv[])
 {
-	t_config	*c;
+	int	i;
 
-	c = (t_config *) arg;
-	timestamp(1, "says hello");
-	return (NULL);
-}
-
-void	create_threads(t_config config)
-{
-	int			i;
-	pthread_t	id;
-
-	i = 0;
-	while (i < config.number)
+	i = 1;
+	while (i < argc)
 	{
-		config.philo_array[i].thread = id;
-		pthread_create(&id, NULL, routine, (void *)&config);
-		pthread_join(id, NULL);
+		if (ft_atoi(argv[i]) < 0)
+			return (0);
 		i++;
 	}
+	return (1);
 }

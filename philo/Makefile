@@ -6,7 +6,8 @@ SRC			=	atoi.c \
 				initialization.c \
 				main.c \
 				threads.c \
-				timestamps.c
+				timestamps.c  \
+				validation.c
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJS		= $(SRCS:.c=.o)
 INCLUDES	= -I./includes
