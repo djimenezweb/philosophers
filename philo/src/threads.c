@@ -28,11 +28,11 @@ void	*routine(void *arg)
 	pthread_mutex_t	right_fork;
 
 	p = (t_philo *)arg;
-	left_fork = p->config->forks[p->id];
-	if (p->id == p->config->number - 1)
-		right_fork = p->config->forks[0];
+	left_fork = p->config.forks[p->id];
+	if (p->id == p->config.number - 1)
+		right_fork = p->config.forks[0];
 	else
-		right_fork = p->config->forks[p->id + 1];
+		right_fork = p->config.forks[p->id + 1];
 	timestamp(p->id, "says hello");
 	(void)left_fork;
 	(void)right_fork;

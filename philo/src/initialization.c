@@ -18,7 +18,7 @@ t_philo	init_philo(t_config config, int id)
 	t_philo	p;
 
 	p.id = id;
-	p.config = &config;
+	p.config = config;
 	return (p);
 }
 

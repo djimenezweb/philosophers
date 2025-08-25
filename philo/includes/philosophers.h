@@ -20,13 +20,6 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_philo
-{
-	int				id;
-	pthread_t		thread;
-	struct s_config	*config;
-}					t_philo;
-
 typedef struct s_config
 {
 	int				number;
@@ -34,9 +27,16 @@ typedef struct s_config
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_loops;
-	t_philo			*philo_array;
+	struct s_philo	*philo_array;
 	pthread_mutex_t	*forks;
-}			t_config;
+}					t_config;
+
+typedef struct s_philo
+{
+	int			id;
+	pthread_t	thread;
+	t_config	config;
+}				t_philo;
 
 /* atoi.c */
 
