@@ -40,7 +40,7 @@ t_philo	*init_array(t_config config, int n)
 	return (arr);
 }
 
-pthread_mutex_t *init_mutex(t_config config, int n)
+/* pthread_mutex_t *init_mutex(t_config config, int n)
 {
 	int	i;
 	pthread_mutex_t	*arr;
@@ -56,7 +56,7 @@ pthread_mutex_t *init_mutex(t_config config, int n)
 		i++;
 	}
 	return (arr);
-}
+} */
 
 /* Returns an initialized `t_config` structure */
 t_config	init_config(int argc, char *argv[])
@@ -72,6 +72,6 @@ t_config	init_config(int argc, char *argv[])
 	else
 		config.max_loops = -1;
 	config.philo_array = init_array(config, config.number);
-	init_mutex(config, config.number);
+	//init_mutex(config, config.number);
 	return (config);
 }
