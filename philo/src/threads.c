@@ -12,39 +12,12 @@
 
 #include "philosophers.h"
 
-/* void	*routine(void *arg)
-{
-	t_config	*c;
-
-	c = (t_config *)arg;
-	timestamp(1, "says hello");
-	return (NULL);
-} */
-
 void	*routine(void *arg)
 {
 	t_philo			*p;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	right_fork;
-	//int	result;
 
 	p = (t_philo *)arg;
-	timestamp(p->id, "says hello");	
-	if (p->id == 1)
-	{
-		//left_fork = p->config.forks[p->id];
-		//right_fork = p->config.forks[p->id + 1];
-		//result = pthread_mutex_lock(&left_fork);
-		//printf("mutex_lock result: %d\n", result);
-		if (pthread_mutex_lock(&left_fork) == 0)
-			timestamp(p->id, "takes left fork");
-		else
-			printf("Something went wrong! (left)\n");
-		if (pthread_mutex_lock(&right_fork) == 0)
-			timestamp(p->id, "takes right fork");
-		else
-			printf("Something went wrong! (right)\n");
-	}
+	timestamp(p->id, "says hello");
 	return (NULL);
 }
 

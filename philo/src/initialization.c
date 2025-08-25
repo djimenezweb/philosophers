@@ -40,24 +40,6 @@ t_philo	*init_array(t_config config, int n)
 	return (arr);
 }
 
-/* pthread_mutex_t *init_mutex(t_config config, int n)
-{
-	int	i;
-	pthread_mutex_t	*arr;
-
-	arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n);
-	if (!arr)
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		config.forks = arr;
-		pthread_mutex_init(&(arr[i]), NULL);
-		i++;
-	}
-	return (arr);
-} */
-
 /* Returns an initialized `t_config` structure */
 t_config	init_config(int argc, char *argv[])
 {
