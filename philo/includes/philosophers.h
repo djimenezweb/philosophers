@@ -29,12 +29,13 @@ typedef struct s_philo
 
 typedef struct s_config
 {
-	int		number;
-	int		tt_die;
-	int		tt_eat;
-	int		tt_sleep;
-	int		max_loops;
-	t_philo	*philo_array;
+	int				number;
+	int				tt_die;
+	int				tt_eat;
+	int				tt_sleep;
+	int				max_loops;
+	t_philo			*philo_array;
+	pthread_mutex_t	*forks;
 }			t_config;
 
 /* atoi.c */

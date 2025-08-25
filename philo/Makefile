@@ -35,9 +35,9 @@ re : fclean all
 
 run : all
 	@$(MAKE) clean
-	./$(NAME) 10 20 30 40 50
+	./$(NAME) 5 20 30 40 50
 
 check : all
-	valgrind ./$(NAME) 10 20 30 40 50
+	valgrind ./$(NAME) 5 20 30 40 50
 
 .PHONY : all clean fclean re run check
