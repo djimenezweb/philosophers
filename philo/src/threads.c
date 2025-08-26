@@ -12,12 +12,31 @@
 
 #include "philosophers.h"
 
+void	eat(t_philo p)
+{
+	int	left_fork;
+	int	right_fork;
+
+	left_fork = p.id - 1;
+	if (p.id == p.config.number - 1)
+		right_fork = 0;
+	else
+		right_fork = p.id;
+	pthread_mutex_lock(&(p.config.forks[left_fork]));
+	timestamp(p.id, "takes left fork");
+	pthread_mutex_lock(&(p.config.forks[right_fork]));
+	timestamp(p.id, "takes right fork");
+	usleep(p.config.tt_eat * 10);
+	
+}
+
 void	*routine(void *arg)
 {
-	t_philo			*p;
+	t_philo	*p;
 
 	p = (t_philo *)arg;
 	timestamp(p->id, "says hello");
+	eat(*p);
 	return (NULL);
 }
 

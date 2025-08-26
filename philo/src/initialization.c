@@ -22,6 +22,16 @@ t_philo	init_philo(t_config config, int id)
 	return (p);
 }
 
+pthread_mutex_t	*init_forks(int n)
+{
+	pthread_mutex_t	*arr;
+
+	arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n);
+	if (!arr)
+		return (NULL);
+	return (arr);
+}
+
 /* Returns an array of philosophers */
 t_philo	*init_array(t_config config, int n)
 {
@@ -54,6 +64,7 @@ t_config	init_config(int argc, char *argv[])
 	else
 		config.max_loops = -1;
 	config.philo_array = init_array(config, config.number);
+	config.forks = init_forks(config.number);
 	//init_mutex(config, config.number);
 	return (config);
 }

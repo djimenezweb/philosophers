@@ -27,6 +27,7 @@ typedef struct s_config
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_loops;
+	pthread_mutex_t	*forks;
 	struct s_philo	*philo_array;
 }					t_config;
 
