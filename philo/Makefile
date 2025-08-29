@@ -11,6 +11,7 @@ SRC			=	atoi.c \
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJS		= $(SRCS:.c=.o)
 INCLUDES	= -I./includes
+ARGS		= 5 800 200 200
 
 all : $(NAME)
 
@@ -35,9 +36,9 @@ re : fclean all
 
 run : all
 	@$(MAKE) clean
-	./$(NAME) 5 800 200 200
+	./$(NAME) $(ARGS)
 
 check : all
-	valgrind ./$(NAME) 5 800 200 200
+	valgrind ./$(NAME) $(ARGS)
 
 .PHONY : all clean fclean re run check
