@@ -26,7 +26,7 @@ void	eat(t_philo p)
 	timestamp(p.id, "takes left fork");
 	pthread_mutex_lock(&(p.config.forks[right_fork]));
 	timestamp(p.id, "takes right fork");
-	usleep(p.config.tt_eat * 10);
+	usleep(p.config.tt_eat * 1000);
 	
 }
 
