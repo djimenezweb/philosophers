@@ -32,6 +32,23 @@ pthread_mutex_t	*init_forks(int n)
 	return (arr);
 }
 
+int	*init_fork_access(int n)
+{
+	int	i;
+	int	*arr;
+
+	arr = (int *)malloc(sizeof(int) * n);
+	if (!arr)
+		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		arr[i] = 1;
+		i++;
+	}
+	return (arr);
+}
+
 /* Returns an array of philosophers */
 t_philo	*init_array(t_config config, int n)
 {
@@ -63,8 +80,9 @@ t_config	init_config(int argc, char *argv[])
 		config.max_loops = ft_atoi(argv[5]);
 	else
 		config.max_loops = -1;
-	config.philo_array = init_array(config, config.number);
 	config.forks = init_forks(config.number);
+	config.fork_access = init_fork_access(config.number);
+	config.philo_array = init_array(config, config.number);
 	//init_mutex(config, config.number);
 	return (config);
 }

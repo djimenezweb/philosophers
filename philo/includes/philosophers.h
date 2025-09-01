@@ -28,6 +28,7 @@ typedef struct s_config
 	int				tt_sleep;
 	int				max_loops;
 	pthread_mutex_t	*forks;
+	int				*fork_access;
 	struct s_philo	*philo_array;
 }					t_config;
 

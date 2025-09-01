@@ -23,5 +23,7 @@ int	main(int argc, char *argv[])
 	config = init_config(argc, argv);
 	create_threads(config);
 	free(config.philo_array);
+	free(config.forks);
+	free(config.fork_access);
 	return (EXIT_SUCCESS);
 }

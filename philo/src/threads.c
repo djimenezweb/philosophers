@@ -22,12 +22,28 @@ void	eat(t_philo p)
 		right_fork = 0;
 	else
 		right_fork = p.id;
-	pthread_mutex_lock(&(p.config.forks[left_fork]));
-	timestamp(p.id, "takes left fork");
-	pthread_mutex_lock(&(p.config.forks[right_fork]));
-	timestamp(p.id, "takes right fork");
-	usleep(p.config.tt_eat * 1000);
-	
+	if (p.config.fork_access[left_fork] && p.config.fork_access[right_fork])
+	{
+		pthread_mutex_lock(&(p.config.forks[left_fork]));
+		timestamp(p.id, "takes left fork");
+		pthread_mutex_lock(&(p.config.forks[right_fork]));
+		timestamp(p.id, "takes right fork");
+		p.config.fork_access[left_fork] = 0;
+		p.config.fork_access[right_fork] = 0;
+		timestamp(p.id, "is eating");
+		usleep(p.config.tt_eat * 1000);
+		pthread_mutex_unlock(&(p.config.forks[left_fork]));
+		timestamp(p.id, "puts down left fork");
+		pthread_mutex_unlock(&(p.config.forks[right_fork]));
+		timestamp(p.id, "puts down right fork");
+		p.config.fork_access[left_fork] = 1;
+		p.config.fork_access[right_fork] = 1;
+	}
+	else
+	{
+		timestamp(p.id, "can't take left fork");
+		timestamp(p.id, "can't take right fork");
+	}
 }
 
 void	*routine(void *arg)
