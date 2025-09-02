@@ -45,7 +45,7 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_config		config;
-	//int				last_lunch_time;
+	//long long		last_lunch_time;
 }					t_philo;
 
 /* atoi.c */
