@@ -31,6 +31,7 @@ void	take_forks(t_philo p)
 void	eat(t_philo p)
 {
 	take_forks(p);
+	//p.last_lunch_time = getmilliseconds();
 	timestamp(p.id, EAT);
 	ft_sleep_ms(p.config.tt_eat);
 	put_down_forks(p);

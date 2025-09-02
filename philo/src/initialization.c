@@ -67,7 +67,7 @@ t_config	init_config(int argc, char *argv[])
 	config.tt_die = ft_atoi(argv[2]);
 	config.tt_eat = ft_atoi(argv[3]);
 	config.tt_sleep = ft_atoi(argv[4]);
-	if (argc >= 6)
+	if (argc == 6)
 		config.max_loops = ft_atoi(argv[5]);
 	else
 		config.max_loops = -1;

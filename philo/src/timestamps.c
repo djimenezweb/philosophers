@@ -40,6 +40,7 @@ void	timestamp(int id, int mode)
 	printf("%lld %d %s\n", getmilliseconds(), id, str);
 }
 
+/* Returns current Epoch time in milliseconds */
 long long	getmilliseconds(void)
 {
 	struct timeval	tv;
@@ -48,6 +49,7 @@ long long	getmilliseconds(void)
 	return ((long long)(tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
+/* Suspend execution for an interval in milliseconds */
 void	ft_sleep_ms(int ms)
 {
 	usleep(ms * 1000);
