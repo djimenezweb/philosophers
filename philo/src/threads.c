@@ -15,24 +15,23 @@
 void	put_down_forks(t_philo p)
 {
 	pthread_mutex_unlock(p.left_fork);
-	timestamp(p.id, DOWN_FORK);
+	timestamp(p.id, DOWN_FORK, p.config.start_time);
 	pthread_mutex_unlock(p.right_fork);
-	timestamp(p.id, DOWN_FORK);
+	timestamp(p.id, DOWN_FORK, p.config.start_time);
 }
 
 void	take_forks(t_philo p)
 {
 	pthread_mutex_lock(p.left_fork);
-	timestamp(p.id, TAKE_FORK);
+	timestamp(p.id, TAKE_FORK, p.config.start_time);
 	pthread_mutex_lock(p.right_fork);
-	timestamp(p.id, TAKE_FORK);
+	timestamp(p.id, TAKE_FORK, p.config.start_time);
 }
 
 void	eat(t_philo p)
 {
 	take_forks(p);
-	//p.last_lunch_time = getmilliseconds();
-	timestamp(p.id, EAT);
+	timestamp(p.id, EAT, p.config.start_time);
 	ft_sleep_ms(p.config.tt_eat);
 	put_down_forks(p);
 }
@@ -42,27 +41,35 @@ void	*routine(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-/* 	if (p->id % 2 == 0)
-		ft_sleep_ms(1); */
+	if (p->id % 2 == 0)
+		ft_sleep_ms(1);
 	eat(*p);
-	timestamp(p->id, SLEEP);
+	timestamp(p->id, SLEEP, p->config.start_time);
 	ft_sleep_ms(p->config.tt_sleep);
-	timestamp(p->id, THINK);
+	timestamp(p->id, THINK, p->config.start_time);
 	return (NULL);
 }
 
 /* Creates and join one thread per philosopher */
 void	create_threads(t_config config)
 {
-	int		i;
-	t_philo	p;
+	int	i;
 
 	i = 0;
 	while (i < config.total_philo)
 	{
-		p = config.philo_array[i];
-		pthread_create(&p.thread, NULL, routine, (void *)&p);
-		pthread_join(p.thread, NULL);
+		pthread_create(
+			&config.philo_array[i].thread,
+			NULL,
+			routine,
+			(void *)&config.philo_array[i]
+		);
+		i++;
+	}
+	i = 0;
+	while (i < config.total_philo)
+	{
+		pthread_join(config.philo_array[i].thread, NULL);
 		i++;
 	}
 }

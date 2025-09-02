@@ -20,10 +20,14 @@
 ◦ timestamp_in_ms X died
 Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
 y X con el numero del filósofo. */
-void	timestamp(int id, int mode)
+void	timestamp(int id, int mode, long long start)
 {
-	char	*str;
-
+	char		*str;
+	long long	now;
+	long long	delta;
+	
+	now = getmilliseconds();
+	delta = now - start;
 	str = "";
 	if (mode == TAKE_FORK)
 		str = "has taken a fork";
@@ -37,7 +41,7 @@ void	timestamp(int id, int mode)
 		str = "is thinking";
 	else if (mode == DIE)
 		str = "died";
-	printf("%lld %d %s\n", getmilliseconds(), id, str);
+	printf("%lld %d %s\n", delta, id, str);
 }
 
 /* Returns current Epoch time in milliseconds */
@@ -46,7 +50,8 @@ long long	getmilliseconds(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((long long)(tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	//return ((long long)(tv.tv_sec * (long long)1000) + (tv.tv_usec / 1000));
+	return ( (long long)tv.tv_sec * 1000 + tv.tv_usec / 1000 );
 }
 
 /* Suspend execution for an interval in milliseconds */

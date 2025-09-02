@@ -36,6 +36,7 @@ typedef struct s_config
 	int				max_loops;
 	pthread_mutex_t	*forks;
 	struct s_philo	*philo_array;
+	long long		start_time;
 }					t_config;
 
 typedef struct s_philo
@@ -50,27 +51,31 @@ typedef struct s_philo
 
 /* atoi.c */
 
-int			ft_atoi(const char *str);
+int				ft_atoi(const char *str);
 
 /* initialization.c */
 
-t_config	init_config(int argc, char *argv[]);
-t_philo		init_philo(t_config config, int id);
-t_philo		*init_array(t_config config, int n);
+t_philo			init_philo(t_config config, int id);
+pthread_mutex_t	*init_forks(int n);
+t_philo			*init_array(t_config config, int n);
+t_config		init_config(int argc, char *argv[]);
 
 /* threads.c */
 
-void		*routine(void *arg);
-void		create_threads(t_config config);
+void			put_down_forks(t_philo p);
+void			take_forks(t_philo p);
+void			eat(t_philo p);
+void			*routine(void *arg);
+void			create_threads(t_config config);
 
 /* timestamps.c */
 
-long long	getmilliseconds(void);
-void		timestamp(int id, int mode);
-void		ft_sleep_ms(int ms);
+void			timestamp(int id, int mode, long long start);
+long long		getmilliseconds(void);
+void			ft_sleep_ms(int ms);
 
 /* validation.c */
 
-int			arg_validation(int argc, char *argv[]);
+int				arg_validation(int argc, char *argv[]);
 
 #endif

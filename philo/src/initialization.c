@@ -22,7 +22,7 @@ t_philo	init_philo(t_config config, int id)
 	p.id = id;
 	p.config = config;
 	p.left_fork = &config.forks[id - 1];
-	if (id == p.config.total_philo - 1)
+	if (id == p.config.total_philo)
 		p.right_fork = &config.forks[0];
 	else
 		p.right_fork = &config.forks[id];
@@ -73,5 +73,7 @@ t_config	init_config(int argc, char *argv[])
 		config.max_loops = -1;
 	config.forks = init_forks(config.total_philo);
 	config.philo_array = init_array(config, config.total_philo);
+	config.start_time = getmilliseconds();
+	printf("CONFIG START TIME: %lld\n", config.start_time);
 	return (config);
 }
