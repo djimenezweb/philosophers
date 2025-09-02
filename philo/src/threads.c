@@ -12,38 +12,28 @@
 
 #include "philosophers.h"
 
+void	put_down_forks(t_philo p)
+{
+	pthread_mutex_unlock(p.left_fork);
+	timestamp(p.id, DOWN_FORK);
+	pthread_mutex_unlock(p.right_fork);
+	timestamp(p.id, DOWN_FORK);
+}
+
+void	take_forks(t_philo p)
+{
+	pthread_mutex_lock(p.left_fork);
+	timestamp(p.id, TAKE_FORK);
+	pthread_mutex_lock(p.right_fork);
+	timestamp(p.id, TAKE_FORK);
+}
+
 void	eat(t_philo p)
 {
-	int	left_fork;
-	int	right_fork;
-
-	left_fork = p.id - 1;
-	if (p.id == p.config.number - 1)
-		right_fork = 0;
-	else
-		right_fork = p.id;
-	if (p.config.fork_access[left_fork] && p.config.fork_access[right_fork])
-	{
-		pthread_mutex_lock(&(p.config.forks[left_fork]));
-		timestamp(p.id, "takes left fork");
-		pthread_mutex_lock(&(p.config.forks[right_fork]));
-		timestamp(p.id, "takes right fork");
-		p.config.fork_access[left_fork] = 0;
-		p.config.fork_access[right_fork] = 0;
-		timestamp(p.id, "is eating");
-		usleep(p.config.tt_eat * 1000);
-		pthread_mutex_unlock(&(p.config.forks[left_fork]));
-		timestamp(p.id, "puts down left fork");
-		pthread_mutex_unlock(&(p.config.forks[right_fork]));
-		timestamp(p.id, "puts down right fork");
-		p.config.fork_access[left_fork] = 1;
-		p.config.fork_access[right_fork] = 1;
-	}
-	else
-	{
-		timestamp(p.id, "can't take left fork");
-		timestamp(p.id, "can't take right fork");
-	}
+	take_forks(p);
+	timestamp(p.id, EAT);
+	ft_sleep_ms(p.config.tt_eat);
+	put_down_forks(p);
 }
 
 void	*routine(void *arg)
@@ -51,24 +41,27 @@ void	*routine(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-	timestamp(p->id, "says hello");
+/* 	if (p->id % 2 == 0)
+		ft_sleep_ms(1); */
 	eat(*p);
+	timestamp(p->id, SLEEP);
+	ft_sleep_ms(p->config.tt_sleep);
+	timestamp(p->id, THINK);
 	return (NULL);
 }
 
+/* Creates and join one thread per philosopher */
 void	create_threads(t_config config)
 {
-	int			i;
-	pthread_t	thread;
-	t_philo		p;
+	int		i;
+	t_philo	p;
 
 	i = 0;
-	while (i < config.number)
+	while (i < config.total_philo)
 	{
 		p = config.philo_array[i];
-		p.thread = thread;
-		pthread_create(&thread, NULL, routine, (void *)&p);
-		pthread_join(thread, NULL);
+		pthread_create(&p.thread, NULL, routine, (void *)&p);
+		pthread_join(p.thread, NULL);
 		i++;
 	}
 }

@@ -20,12 +20,35 @@
 ◦ timestamp_in_ms X died
 Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
 y X con el numero del filósofo. */
-void	timestamp(int id, char *str)
+void	timestamp(int id, int mode)
+{
+	char	*str;
+
+	str = "";
+	if (mode == TAKE_FORK)
+		str = "has taken a fork";
+	else if (mode == EAT)
+		str = "is eating";
+	else if (mode == DOWN_FORK)
+		str = "puts down fork";
+	else if (mode == SLEEP)
+		str = "is sleeping";
+	else if (mode == THINK)
+		str = "is thinking";
+	else if (mode == DIE)
+		str = "died";
+	printf("%lld %d %s\n", getmilliseconds(), id, str);
+}
+
+long long	getmilliseconds(void)
 {
 	struct timeval	tv;
-	long long		ms;
 
 	gettimeofday(&tv, NULL);
-	ms = (long long)(tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	printf("%lld %d %s\n", ms, id, str);
+	return ((long long)(tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+void	ft_sleep_ms(int ms)
+{
+	usleep(ms * 1000);
 }

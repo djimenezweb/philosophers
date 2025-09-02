@@ -12,16 +12,24 @@
 
 #include "philosophers.h"
 
-/* Returns a philosopher */
+/* Assigns `id` to philosopher
+Assigns left and right fork
+Returns a philosopher */
 t_philo	init_philo(t_config config, int id)
 {
 	t_philo	p;
 
 	p.id = id;
 	p.config = config;
+	p.left_fork = &config.forks[id - 1];
+	if (id == p.config.total_philo - 1)
+		p.right_fork = &config.forks[0];
+	else
+		p.right_fork = &config.forks[id];
 	return (p);
 }
 
+/* Returns an array of forks (pthread_mutex_t) */
 pthread_mutex_t	*init_forks(int n)
 {
 	pthread_mutex_t	*arr;
@@ -29,23 +37,6 @@ pthread_mutex_t	*init_forks(int n)
 	arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n);
 	if (!arr)
 		return (NULL);
-	return (arr);
-}
-
-int	*init_fork_access(int n)
-{
-	int	i;
-	int	*arr;
-
-	arr = (int *)malloc(sizeof(int) * n);
-	if (!arr)
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		arr[i] = 1;
-		i++;
-	}
 	return (arr);
 }
 
@@ -72,7 +63,7 @@ t_config	init_config(int argc, char *argv[])
 {
 	t_config	config;
 
-	config.number = ft_atoi(argv[1]);
+	config.total_philo = ft_atoi(argv[1]);
 	config.tt_die = ft_atoi(argv[2]);
 	config.tt_eat = ft_atoi(argv[3]);
 	config.tt_sleep = ft_atoi(argv[4]);
@@ -80,9 +71,7 @@ t_config	init_config(int argc, char *argv[])
 		config.max_loops = ft_atoi(argv[5]);
 	else
 		config.max_loops = -1;
-	config.forks = init_forks(config.number);
-	config.fork_access = init_fork_access(config.number);
-	config.philo_array = init_array(config, config.number);
-	//init_mutex(config, config.number);
+	config.forks = init_forks(config.total_philo);
+	config.philo_array = init_array(config, config.total_philo);
 	return (config);
 }

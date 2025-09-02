@@ -20,24 +20,32 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+# define TAKE_FORK 1
+# define EAT 2
+# define DOWN_FORK 3
+# define SLEEP 4
+# define THINK 5
+# define DIE 6
+
 typedef struct s_config
 {
-	int				number;
+	int				total_philo;
 	int				tt_die;
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_loops;
 	pthread_mutex_t	*forks;
-	int				*fork_access;
 	struct s_philo	*philo_array;
 }					t_config;
 
 typedef struct s_philo
 {
-	int			id;
-	pthread_t	thread;
-	t_config	config;
-}				t_philo;
+	int				id;
+	pthread_t		thread;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	t_config		config;
+}					t_philo;
 
 /* atoi.c */
 
@@ -56,9 +64,12 @@ void		create_threads(t_config config);
 
 /* timestamps.c */
 
-void		timestamp(int id, char *str);
+long long	getmilliseconds(void);
+void		timestamp(int id, int mode);
+void		ft_sleep_ms(int ms);
 
 /* validation.c */
+
 int			arg_validation(int argc, char *argv[]);
 
 #endif
