@@ -23,6 +23,7 @@ void	put_down_forks(t_philo p)
 void	take_forks(t_philo p)
 {
 	pthread_mutex_lock(p.left_fork);
+	//printf("take forks start: %lld\n", p.config.start_time);
 	timestamp(p.id, TAKE_FORK, p.config.start_time);
 	pthread_mutex_lock(p.right_fork);
 	timestamp(p.id, TAKE_FORK, p.config.start_time);

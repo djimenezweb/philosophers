@@ -21,6 +21,8 @@ int	main(int argc, char *argv[])
 	if (!arg_validation(argc, argv))
 		return (EXIT_FAILURE);
 	config = init_config(argc, argv);
+	printf("MAIN START TIME:   %lld\n", config.start_time);
+	printf("================================\n");
 	create_threads(config);
 	free(config.philo_array);
 	free(config.forks);

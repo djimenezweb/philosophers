@@ -29,6 +29,7 @@
 
 typedef struct s_config
 {
+	long long		start_time;
 	int				total_philo;
 	int				tt_die;
 	int				tt_eat;
@@ -36,7 +37,6 @@ typedef struct s_config
 	int				max_loops;
 	pthread_mutex_t	*forks;
 	struct s_philo	*philo_array;
-	long long		start_time;
 }					t_config;
 
 typedef struct s_philo

@@ -74,6 +74,8 @@ t_config	init_config(int argc, char *argv[])
 	config.forks = init_forks(config.total_philo);
 	config.philo_array = init_array(config, config.total_philo);
 	config.start_time = getmilliseconds();
+	printf("================================\n");
 	printf("CONFIG START TIME: %lld\n", config.start_time);
+	printf("================================\n");
 	return (config);
 }

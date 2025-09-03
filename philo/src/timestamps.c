@@ -26,8 +26,11 @@ void	timestamp(int id, int mode, long long start)
 	long long	now;
 	long long	delta;
 	
+	printf("start: %lld\n", start);
 	now = getmilliseconds();
+	printf("now:   %lld\n", now);
 	delta = now - start;
+	printf("delta: %lld\n", delta);
 	str = "";
 	if (mode == TAKE_FORK)
 		str = "has taken a fork";
