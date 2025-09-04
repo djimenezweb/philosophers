@@ -45,7 +45,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	t_config		config;
+	t_config		*config;
 	//long long		last_lunch_time;
 }					t_philo;
 
@@ -55,9 +55,9 @@ int				ft_atoi(const char *str);
 
 /* initialization.c */
 
-t_philo			init_philo(t_config config, int id);
+t_philo			init_philo(t_config *config, int id);
 pthread_mutex_t	*init_forks(int n);
-t_philo			*init_array(t_config config, int n);
+t_philo			*init_array(t_config *config, int n);
 t_config		init_config(int argc, char *argv[]);
 
 /* threads.c */
@@ -66,7 +66,7 @@ void			put_down_forks(t_philo p);
 void			take_forks(t_philo p);
 void			eat(t_philo p);
 void			*routine(void *arg);
-void			create_threads(t_config config);
+void			create_threads(t_config *config);
 
 /* timestamps.c */
 

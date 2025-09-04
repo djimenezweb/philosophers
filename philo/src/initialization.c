@@ -15,33 +15,40 @@
 /* Assigns `id` to philosopher
 Assigns left and right fork
 Returns a philosopher */
-t_philo	init_philo(t_config config, int id)
+t_philo	init_philo(t_config *config, int id)
 {
 	t_philo	p;
 
 	p.id = id;
 	p.config = config;
-	p.left_fork = &config.forks[id - 1];
-	if (id == p.config.total_philo)
-		p.right_fork = &config.forks[0];
+	p.left_fork = &config->forks[id - 1];
+	if (id == config->total_philo)
+		p.right_fork = &config->forks[0];
 	else
-		p.right_fork = &config.forks[id];
+		p.right_fork = &config->forks[id];
 	return (p);
 }
 
 /* Returns an array of forks (pthread_mutex_t) */
 pthread_mutex_t	*init_forks(int n)
 {
+	int				i;
 	pthread_mutex_t	*arr;
 
 	arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n);
 	if (!arr)
 		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		pthread_mutex_init(&arr[i], NULL);
+		i++;
+	}
 	return (arr);
 }
 
 /* Returns an array of philosophers */
-t_philo	*init_array(t_config config, int n)
+t_philo	*init_array(t_config *config, int n)
 {
 	int		i;
 	t_philo	*arr;
@@ -72,10 +79,5 @@ t_config	init_config(int argc, char *argv[])
 	else
 		config.max_loops = -1;
 	config.forks = init_forks(config.total_philo);
-	config.philo_array = init_array(config, config.total_philo);
-	config.start_time = getmilliseconds();
-	printf("================================\n");
-	printf("CONFIG START TIME: %lld\n", config.start_time);
-	printf("================================\n");
 	return (config);
 }
