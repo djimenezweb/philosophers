@@ -25,6 +25,10 @@ int	main(int argc, char *argv[])
 	config.start_time = getmilliseconds();
 	create_threads(&config);
 	free(config.philo_array);
+	/* Destroy mutexes before free
+		for (int i = 0; i < config.total_philo; i++)
+			pthread_mutex_destroy(&config.forks[i]);
+	*/
 	free(config.forks);
 	return (EXIT_SUCCESS);
 }
