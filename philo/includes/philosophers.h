@@ -64,7 +64,7 @@ void			cleanup(t_config *config);
 t_philo			init_philo(t_config *config, int id);
 pthread_mutex_t	*init_forks(int n);
 t_philo			*init_array(t_config *config, int n);
-t_config		init_config(int argc, char *argv[]);
+int				init_config(t_config *config, int argc, char *argv[]);
 
 /* threads.c */
 

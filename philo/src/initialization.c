@@ -66,18 +66,22 @@ t_philo	*init_array(t_config *config, int n)
 }
 
 /* Returns an initialized `t_config` structure */
-t_config	init_config(int argc, char *argv[])
+int	init_config(t_config *config, int argc, char *argv[])
 {
-	t_config	config;
-
-	config.total_philo = ft_atoi(argv[1]);
-	config.tt_die = ft_atoi(argv[2]);
-	config.tt_eat = ft_atoi(argv[3]);
-	config.tt_sleep = ft_atoi(argv[4]);
+	config->total_philo = ft_atoi(argv[1]);
+	config->tt_die = ft_atoi(argv[2]);
+	config->tt_eat = ft_atoi(argv[3]);
+	config->tt_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		config.max_loops = ft_atoi(argv[5]);
+		config->max_loops = ft_atoi(argv[5]);
 	else
-		config.max_loops = -1;
-	config.forks = init_forks(config.total_philo);
-	return (config);
+		config->max_loops = -1;
+	config->forks = init_forks(config->total_philo);
+	if (!config->forks)
+		return (-1);
+	config->philo_array = init_array(config, config->total_philo);
+	if (!config->philo_array)
+		return (-1);
+	config->start_time = getmilliseconds();
+	return (0);
 }
