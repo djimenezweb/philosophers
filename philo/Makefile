@@ -3,10 +3,11 @@ CC			= cc
 CFLAGS		= -Wall -Werror -Wextra
 SRC_PATH	= src/
 SRC			=	atoi.c \
+				errors.c \
 				initialization.c \
 				main.c \
 				threads.c \
-				timestamps.c  \
+				timestamps.c \
 				validation.c
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJS		= $(SRCS:.c=.o)
