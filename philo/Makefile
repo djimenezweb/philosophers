@@ -3,6 +3,7 @@ CC			= cc
 CFLAGS		= -Wall -Werror -Wextra
 SRC_PATH	= src/
 SRC			=	atoi.c \
+				cleanup.c \
 				errors.c \
 				initialization.c \
 				main.c \
