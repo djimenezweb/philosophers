@@ -50,26 +50,39 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-/* Creates and join one thread per philosopher */
-void	create_threads(t_config *config)
+/* Creates and join one thread per philosopher.
+Returns `0` on success, returns an error number on error  */
+int	create_threads(t_config *config)
 {
 	int	i;
+	int	status;
 
 	i = 0;
 	while (i < config->total_philo)
 	{
-		pthread_create(
+		status = pthread_create(
 			&config->philo_array[i].thread,
 			NULL,
 			routine,
 			(void *)&config->philo_array[i]
 			);
+		if (status != 0)
+		{
+			// TO DO: free something?
+			return (status);
+		}
 		i++;
 	}
 	i = 0;
 	while (i < config->total_philo)
 	{
-		pthread_join(config->philo_array[i].thread, NULL);
+		status = pthread_join(config->philo_array[i].thread, NULL);
+		if (status != 0)
+		{
+			// TO DO: free something?
+			return (status);
+		}
 		i++;
 	}
+	return (0);
 }

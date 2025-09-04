@@ -53,6 +53,12 @@ typedef struct s_philo
 
 int				ft_atoi(const char *str);
 
+/* cleanup.c */
+
+void			cleanup(t_config *config);
+
+/* errors.c */
+
 /* initialization.c */
 
 t_philo			init_philo(t_config *config, int id);
@@ -66,7 +72,7 @@ void			put_down_forks(t_philo p);
 void			take_forks(t_philo p);
 void			eat(t_philo p);
 void			*routine(void *arg);
-void			create_threads(t_config *config);
+int				create_threads(t_config *config);
 
 /* timestamps.c */
 
