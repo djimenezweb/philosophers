@@ -65,13 +65,18 @@ void	*routine(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
+	// Si es par se retrasa 1ms para que empiece más tarde
+	// pero no me gusta esta solución
 	if (p->id % 2 == 0)
 		ft_sleep_ms(1);
+	// EAT
 	p->status = eat(*p);
 	if (p->status != 0)
 		return (NULL);
+	// SLEEP
 	timestamp(p->id, SLEEP, p->config->start_time);
 	ft_sleep_ms(p->config->tt_sleep);
+	// THINK
 	timestamp(p->id, THINK, p->config->start_time);
 	return (NULL);
 }

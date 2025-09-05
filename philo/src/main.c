@@ -25,7 +25,8 @@ int	main(int argc, char *argv[])
 	if (status != 0)
 		return (cleanup(&config), EXIT_FAILURE);
 		// TO DO: free something else?
-	if (create_threads(&config) != 0)
+	status = create_threads(&config);
+	if (status != 0)
 		return (cleanup(&config), EXIT_FAILURE);
 		// TO DO: free something else?
 	cleanup(&config);
