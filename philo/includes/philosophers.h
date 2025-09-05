@@ -73,6 +73,7 @@ void			take_forks(t_philo p);
 void			eat(t_philo p);
 void			*routine(void *arg);
 int				create_threads(t_config *config);
+int				join_threads(t_config *config, int max_threads);
 
 /* timestamps.c */
 

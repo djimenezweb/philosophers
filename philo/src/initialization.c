@@ -12,9 +12,9 @@
 
 #include "philosophers.h"
 
-/* Assigns `id` to philosopher
-Assigns left and right fork
-Returns a philosopher */
+/* - Assigns `id` to philosopher
+- Assigns left and right fork
+- Returns a philosopher */
 t_philo	init_philo(t_config *config, int id)
 {
 	t_philo	p;
@@ -29,7 +29,8 @@ t_philo	init_philo(t_config *config, int id)
 	return (p);
 }
 
-/* Returns an array of forks (pthread_mutex_t) */
+/* Allocates memory and returns an array of forks
+(initialized `pthread_mutex_t`) */
 pthread_mutex_t	*init_forks(int n)
 {
 	int				i;
@@ -47,7 +48,7 @@ pthread_mutex_t	*init_forks(int n)
 	return (arr);
 }
 
-/* Returns an array of philosophers */
+/* Allocates memory and returns an array of initialized philosophers */
 t_philo	*init_array(t_config *config, int n)
 {
 	int		i;

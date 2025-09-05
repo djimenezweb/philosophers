@@ -50,13 +50,13 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-int	join_threads(t_config *config)
+int	join_threads(t_config *config, int max_threads)
 {
 	int	i;
 	int	status;
 
 	i = 0;
-	while (i < config->total_philo)
+	while (i < max_threads)
 	{
 		status = pthread_join(config->philo_array[i].thread, NULL);
 		if (status != 0)
@@ -69,8 +69,9 @@ int	join_threads(t_config *config)
 	return (0);
 }
 
-/* Creates and join one thread per philosopher.
-Returns `0` on success, returns an error number on error  */
+/* - Creates one thread per philosopher
+- Calls `join_threads` to wait for each thread to terminate
+- Returns `0` on success, or an error number on error  */
 int	create_threads(t_config *config)
 {
 	int	i;
@@ -84,12 +85,13 @@ int	create_threads(t_config *config)
 				routine, (void *)&config->philo_array[i]);
 		if (status != 0)
 		{
-			// TO DO: join previously created threads
+			// join previously created threads
+			join_threads(config, i);
 			// TO DO: free something?
 			return (status);
 		}
 		i++;
 	}
-	status = join_threads(config);
+	status = join_threads(config, config->total_philo);
 	return (status);
 }
