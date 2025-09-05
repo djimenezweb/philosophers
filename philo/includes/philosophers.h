@@ -68,9 +68,9 @@ int				init_config(t_config *config, int argc, char *argv[]);
 
 /* threads.c */
 
-void			put_down_forks(t_philo p);
-void			take_forks(t_philo p);
-void			eat(t_philo p);
+int				put_down_forks(t_philo p);
+int				take_forks(t_philo p);
+int				eat(t_philo p);
 void			*routine(void *arg);
 int				create_threads(t_config *config);
 int				join_threads(t_config *config, int max_threads);

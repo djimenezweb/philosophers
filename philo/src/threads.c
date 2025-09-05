@@ -12,41 +12,68 @@
 
 #include "philosophers.h"
 
-void	put_down_forks(t_philo p)
+int	put_down_forks(t_philo p)
 {
-	pthread_mutex_unlock(p.left_fork);
+	int	status;
+
+	status = pthread_mutex_unlock(p.left_fork);
+	if (status != 0)
+		return (status);
 	timestamp(p.id, DOWN_FORK, p.config->start_time);
-	pthread_mutex_unlock(p.right_fork);
+	status = pthread_mutex_unlock(p.right_fork);
+	if (status != 0)
+		return (status);
 	timestamp(p.id, DOWN_FORK, p.config->start_time);
+	return (status);
 }
 
-void	take_forks(t_philo p)
+int	take_forks(t_philo p)
 {
-	pthread_mutex_lock(p.left_fork);
+	int	status;
+
+	status = pthread_mutex_lock(p.left_fork);
+	if (status != 0)
+		return (status);
 	timestamp(p.id, TAKE_FORK, p.config->start_time);
-	pthread_mutex_lock(p.right_fork);
+	status = pthread_mutex_lock(p.right_fork);
+	if (status != 0)
+		return (status);
 	timestamp(p.id, TAKE_FORK, p.config->start_time);
+	return (status);
 }
 
-void	eat(t_philo p)
+int	eat(t_philo p)
 {
-	take_forks(p);
+	int	status;
+
+	status = take_forks(p);
+	if (status != 0)
+		return (status);
 	timestamp(p.id, EAT, p.config->start_time);
 	ft_sleep_ms(p.config->tt_eat);
-	put_down_forks(p);
+	status = put_down_forks(p);
+	return (status);
 }
 
+/* ¿Cómo devolver status (un entero) si esta función debe devolver un puntero? */
 void	*routine(void *arg)
 {
 	t_philo	*p;
+	int		status;
 
 	p = (t_philo *)arg;
 	if (p->id % 2 == 0)
 		ft_sleep_ms(1);
-	eat(*p);
+	status = eat(*p);
+	if (status != 0)
+	{
+		// TO DO
+		//return (status);
+	}
 	timestamp(p->id, SLEEP, p->config->start_time);
 	ft_sleep_ms(p->config->tt_sleep);
 	timestamp(p->id, THINK, p->config->start_time);
+	//return (&status);
 	return (NULL);
 }
 
