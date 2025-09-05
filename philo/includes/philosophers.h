@@ -42,6 +42,7 @@ typedef struct s_config
 typedef struct s_philo
 {
 	int				id;
+	int				status;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;

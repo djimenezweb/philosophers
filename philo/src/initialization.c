@@ -20,6 +20,7 @@ t_philo	init_philo(t_config *config, int id)
 	t_philo	p;
 
 	p.id = id;
+	p.status = 0;
 	p.config = config;
 	p.left_fork = &config->forks[id - 1];
 	if (id == config->total_philo)

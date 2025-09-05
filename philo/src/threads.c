@@ -55,25 +55,24 @@ int	eat(t_philo p)
 	return (status);
 }
 
-/* ¿Cómo devolver status (un entero) si esta función debe devolver un puntero? */
+/* ¿Cómo devolver status (un entero) si esta función
+debe devolver un puntero? */
+/* Sugerencia: Store status in the t_philo struct
+If each t_philo already lives long enough (until after joins),
+you can store the status inside it: */
 void	*routine(void *arg)
 {
 	t_philo	*p;
-	int		status;
 
 	p = (t_philo *)arg;
 	if (p->id % 2 == 0)
 		ft_sleep_ms(1);
-	status = eat(*p);
-	if (status != 0)
-	{
-		// TO DO
-		//return (status);
-	}
+	p->status = eat(*p);
+	if (p->status != 0)
+		return (NULL);
 	timestamp(p->id, SLEEP, p->config->start_time);
 	ft_sleep_ms(p->config->tt_sleep);
 	timestamp(p->id, THINK, p->config->start_time);
-	//return (&status);
 	return (NULL);
 }
 
