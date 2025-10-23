@@ -20,7 +20,7 @@
 ◦ timestamp_in_ms X died
 Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
 y X con el numero del filósofo. */
-void	timestamp(int id, int mode, long long start)
+void	timestamp(int id, int mode, long start)
 {
 	char	*str;
 
@@ -41,12 +41,12 @@ void	timestamp(int id, int mode, long long start)
 }
 
 /* Returns current Epoch time in milliseconds */
-long long	getmilliseconds(void)
+long	getmilliseconds(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((long long)tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	return ((long)tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
 /* Suspend execution for an interval in milliseconds */
