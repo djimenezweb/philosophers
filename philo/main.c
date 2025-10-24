@@ -17,15 +17,17 @@
 void	create_threads(t_config *config)
 {
 	int		i;
-	t_philo	p;
+	t_philo	*p;
 
 	i = 0;
 	while (i < config->total_philo)
 	{
-		p = config->philo_arr[i];
-		pthread_create(&p.thread, NULL, routine, &p);
+		p = &config->philo_arr[i];
+		pthread_create(&p->thread, NULL, routine, p);
+		printf("Created thread %d (philo %d)\n", i, i + 1);
 		i++;
 	}
+	config->start_time = getmilliseconds();
 	i = 0;
 	while (i < config->total_philo)
 	{

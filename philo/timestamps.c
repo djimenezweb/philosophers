@@ -25,7 +25,6 @@ void	timestamp(int id, int mode, long start)
 	long	ms;
 
 	ms = getmilliseconds() - start;
-
 	if (mode == TAKE_FORK)
 		printf("%ld %d has taken a fork\n", ms, id);
 	else if (mode == EAT)

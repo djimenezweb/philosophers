@@ -61,6 +61,6 @@ int	init_config(t_config *config, int argc, char *argv[])
 	config->philo_arr = init_philo_array(config);
 	if (!config->philo_arr)
 		return (-1);
-	config->start_time = getmilliseconds();
+	config->start_time = 0;
 	return (0);
 }

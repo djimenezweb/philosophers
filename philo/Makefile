@@ -28,16 +28,17 @@ $(NAME) : $(OBJS)
 
 clean :
 	rm -f $(OBJS)
+	clear
 
 fclean : clean
 	rm -f $(NAME)
 
 re : fclean all
 
-run : all
+run :
 	./$(NAME) $(ARGS)
 
-check : all
+check :
 	valgrind ./$(NAME) $(ARGS)
 
 .PHONY : all clean fclean re run check

@@ -20,6 +20,10 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+# define L 0
+# define LEFT 0
+# define R 1
+# define RIGHT 1
 # define TAKE_FORK 1
 # define EAT 2
 # define DOWN_FORK 3
@@ -50,10 +54,10 @@ typedef struct s_philo
 #endif
 void	cleanup(t_config *config);
 t_philo	init_philo(t_config *config, int id);
-t_philo	*init_philo_array(t_config *config, int n);
+t_philo	*init_philo_array(t_config *config);
 int		init_config(t_config *config, int argc, char *argv[]);
 void	create_threads(t_config *config);
-void	take_forks(t_philo *p, pthread_mutex_t *lfork, pthread_mutex_t *rfork);
+void	take_forks(t_philo *p, pthread_mutex_t *fork[]);
 void	eat(t_philo *p);
 void	*routine(void *arg);
 void	timestamp(int id, int mode, long start);
