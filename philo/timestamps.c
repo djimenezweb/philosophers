@@ -37,10 +37,10 @@ void	timestamp(int id, int mode, long start)
 		str = "is thinking";
 	else if (mode == DIE)
 		str = "died";
-	printf("%lld %d %s\n", getmilliseconds() - start, id, str);
+	printf("%ld %d %s\n", getmilliseconds() - start, id, str);
 }
 
-/* Returns current Epoch time in milliseconds */
+/* Return current Epoch time in milliseconds */
 long	getmilliseconds(void)
 {
 	struct timeval	tv;

@@ -100,9 +100,9 @@ int	join_threads(t_config *config, int max_threads)
 	return (0);
 }
 
-/* - Creates one thread per philosopher
-- Calls `join_threads` to wait for each thread to terminate
-- Returns `0` on success, or an error number on error  */
+/* - Create one thread per philosopher
+- Call `join_threads` to wait for each thread to terminate
+- Return `0` on success, or an error number on error  */
 int	create_threads(t_config *config)
 {
 	int	i;

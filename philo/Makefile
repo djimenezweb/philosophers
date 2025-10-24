@@ -1,44 +1,40 @@
-NAME		= philosophers
-CC			= cc
-CFLAGS		= -Wall -Werror -Wextra
-SRC_PATH	= src/
-SRC			=	atoi.c \
-				cleanup.c \
-				errors.c \
-				initialization.c \
-				main.c \
-				threads.c \
-				timestamps.c \
-				validation.c
-SRCS		= $(addprefix $(SRC_PATH), $(SRC))
-OBJS		= $(SRCS:.c=.o)
-INCLUDES	= -I./includes
-ARGS		= 5 800 200 200
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/10/24 09:07:40 by danielji          #+#    #+#              #
+#    Updated: 2025/10/24 09:08:01 by danielji         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME	=	philosophers
+CC		=	cc
+CFLAGS	=	-Wall -Werror -Wextra
+SRCS	=	atoi.c cleanup.c errors.c initialization.c main.c threads.c \
+			timestamps.c validation.c
+OBJS	=	$(SRCS:.c=.o)
+ARGS	=	5 800 200 200
 
 all : $(NAME)
-	@echo "============== Done ============="
 
 $(NAME) : $(OBJS)
-	@echo "=========== Compiling ==========="
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o : %.c
-	@echo "===== Creating object files ====="
-	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
-	@echo "======= Removing .o files ======="
-	@rm -f $(OBJS)
+	rm -f $(OBJS)
 
 fclean : clean
-	@echo "=== Removing philo executable ==="
-	@rm -f $(NAME)
+	rm -f $(NAME)
 
 re : fclean all
-	@echo "=========== Rebuilding =========="
 
 run : all
-	@$(MAKE) clean
 	./$(NAME) $(ARGS)
 
 check : all

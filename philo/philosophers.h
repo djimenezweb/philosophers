@@ -29,7 +29,7 @@
 
 typedef struct s_config
 {
-	long		start_time;
+	long			start_time;
 	int				total_philo;
 	int				tt_die;
 	int				tt_eat;
@@ -47,7 +47,7 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_config		*config;
-	//long		last_lunch_time;
+	//long			last_lunch_time;
 }					t_philo;
 
 /* atoi.c */
@@ -79,7 +79,7 @@ int				join_threads(t_config *config, int max_threads);
 /* timestamps.c */
 
 void			timestamp(int id, int mode, long start);
-long		getmilliseconds(void);
+long			getmilliseconds(void);
 void			ft_sleep_ms(int ms);
 
 /* validation.c */
