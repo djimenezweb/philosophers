@@ -35,55 +35,29 @@ typedef struct s_config
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_loops;
-	pthread_mutex_t	*forks;
-	struct s_philo	*philo_array;
+	struct s_philo	*philo_arr;
 }					t_config;
 
 typedef struct s_philo
 {
 	int				id;
-	int				status;
 	pthread_t		thread;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	fork;
 	t_config		*config;
 	//long			last_lunch_time;
 }					t_philo;
 
-/* atoi.c */
-
-int				ft_atoi(const char *str);
-
-/* cleanup.c */
-
-void			cleanup(t_config *config);
-
-/* errors.c */
-
-/* initialization.c */
-
-t_philo			init_philo(t_config *config, int id);
-pthread_mutex_t	*init_forks(int n);
-t_philo			*init_array(t_config *config, int n);
-int				init_config(t_config *config, int argc, char *argv[]);
-
-/* threads.c */
-
-int				put_down_forks(t_philo p);
-int				take_forks(t_philo p);
-int				eat(t_philo p);
-void			*routine(void *arg);
-int				create_threads(t_config *config);
-int				join_threads(t_config *config, int max_threads);
-
-/* timestamps.c */
-
-void			timestamp(int id, int mode, long start);
-long			getmilliseconds(void);
-void			ft_sleep_ms(int ms);
-
-/* validation.c */
-
-int				arg_validation(int argc, char *argv[]);
-
 #endif
+void	cleanup(t_config *config);
+t_philo	init_philo(t_config *config, int id);
+t_philo	*init_philo_array(t_config *config, int n);
+int		init_config(t_config *config, int argc, char *argv[]);
+void	create_threads(t_config *config);
+void	take_forks(t_philo *p, pthread_mutex_t *lfork, pthread_mutex_t *rfork);
+void	eat(t_philo *p);
+void	*routine(void *arg);
+void	timestamp(int id, int mode, long start);
+long	getmilliseconds(void);
+void	ft_sleep_ms(int ms);
+int		ft_atoi(const char *str);
+int		arg_validation(int argc, char *argv[]);

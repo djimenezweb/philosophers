@@ -13,7 +13,7 @@
 NAME	=	philosophers
 CC		=	cc
 CFLAGS	=	-Wall -Werror -Wextra
-SRCS	=	atoi.c cleanup.c errors.c initialization.c main.c threads.c \
+SRCS	=	cleanup.c initialization.c main.c routine.c \
 			timestamps.c validation.c
 OBJS	=	$(SRCS:.c=.o)
 ARGS	=	5 800 200 200

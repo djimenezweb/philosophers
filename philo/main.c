@@ -12,6 +12,28 @@
 
 #include "philosophers.h"
 
+/* - Create one thread per philosopher
+- Wait for each thread to finish */
+void	create_threads(t_config *config)
+{
+	int		i;
+	t_philo	p;
+
+	i = 0;
+	while (i < config->total_philo)
+	{
+		p = config->philo_arr[i];
+		pthread_create(&p.thread, NULL, routine, &p);
+		i++;
+	}
+	i = 0;
+	while (i < config->total_philo)
+	{
+		pthread_join(config->philo_arr[i].thread, NULL);
+		i++;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	int			status;
@@ -22,13 +44,9 @@ int	main(int argc, char *argv[])
 	if (!arg_validation(argc, argv))
 		return (EXIT_FAILURE);
 	status = init_config(&config, argc, argv);
-	if (status != 0)
+	if (status < 0)
 		return (cleanup(&config), EXIT_FAILURE);
-		// TO DO: free something else?
-	status = create_threads(&config);
-	if (status != 0)
-		return (cleanup(&config), EXIT_FAILURE);
-		// TO DO: free something else?
+	create_threads(&config);
 	cleanup(&config);
 	return (EXIT_SUCCESS);
 }
