@@ -51,7 +51,6 @@ typedef struct s_philo
 	//long			last_lunch_time;
 }					t_philo;
 
-#endif
 void	cleanup(t_config *config);
 t_philo	init_philo(t_config *config, int id);
 t_philo	*init_philo_array(t_config *config);
@@ -65,3 +64,5 @@ long	getmilliseconds(void);
 void	ft_sleep_ms(int ms);
 int		ft_atoi(const char *str);
 int		arg_validation(int argc, char *argv[]);
+
+#endif

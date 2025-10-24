@@ -44,7 +44,7 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 	}
 }
 
-pthread_mutex_t *right_fork(t_philo *p)
+pthread_mutex_t	*right_fork(t_philo *p)
 {
 	if (p->id == p->config->total_philo - 1)
 		return (&p->config->philo_arr[0].fork);
@@ -59,7 +59,6 @@ void	eat(t_philo *p)
 	// SET FORKS:
 	forks[L] = &p->fork;
 	forks[R] = right_fork(p);
-
 	// TAKE FORKS:
 	take_forks(p, forks);
 	timestamp(p->id, EAT, p->config->start_time);
