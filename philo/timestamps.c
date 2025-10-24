@@ -22,22 +22,22 @@ Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
 y X con el numero del filósofo. */
 void	timestamp(int id, int mode, long start)
 {
-	char	*str;
+	long	ms;
 
-	str = "";
+	ms = getmilliseconds() - start;
+
 	if (mode == TAKE_FORK)
-		str = "has taken a fork";
+		printf("%ld %d has taken a fork\n", ms, id);
 	else if (mode == EAT)
-		str = "is eating";
+		printf("%ld %d is eating\n", ms, id);
 	else if (mode == DOWN_FORK)
-		str = "puts down fork";
+		printf("%ld %d puts down fork\n", ms, id);
 	else if (mode == SLEEP)
-		str = "is sleeping";
+		printf("%ld %d is sleeping\n", ms, id);
 	else if (mode == THINK)
-		str = "is thinking";
+		printf("%ld %d is thinking\n", ms, id);
 	else if (mode == DIE)
-		str = "died";
-	printf("%ld %d %s\n", getmilliseconds() - start, id, str);
+		printf("%ld %d died\n", ms, id);
 }
 
 /* Return current Epoch time in milliseconds */

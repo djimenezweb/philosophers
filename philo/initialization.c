@@ -12,26 +12,7 @@
 
 #include "philosophers.h"
 
-/* Allocate memory and return an array of forks
-(initialized `pthread_mutex_t`) */
-/* pthread_mutex_t	*init_forks(int n)
-{
-	int				i;
-	pthread_mutex_t	*arr;
-
-	arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n);
-	if (!arr)
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		pthread_mutex_init(&arr[i], NULL);
-		i++;
-	}
-	return (arr);
-} */
-
-/* - Assign `id` and reference to `config` to philosopher
+/* - Assign `id` and reference to `config` to each philosopher
 - Initalize fork mutex
 - Return philosopher */
 t_philo	init_philo(t_config *config, int id)
@@ -45,11 +26,13 @@ t_philo	init_philo(t_config *config, int id)
 }
 
 /* Allocate memory and return an array of initialized philosophers */
-t_philo	*init_philo_array(t_config *config, int n)
+t_philo	*init_philo_array(t_config *config)
 {
 	int		i;
+	int		n;
 	t_philo	*arr;
 
+	n = config->total_philo;
 	arr = (t_philo *)malloc(sizeof(t_philo) * n);
 	if (!arr)
 		return (NULL);
@@ -75,7 +58,7 @@ int	init_config(t_config *config, int argc, char *argv[])
 		config->max_loops = ft_atoi(argv[5]);
 	else
 		config->max_loops = -1;
-	config->philo_arr = init_philo_array(config, config->total_philo);
+	config->philo_arr = init_philo_array(config);
 	if (!config->philo_arr)
 		return (-1);
 	config->start_time = getmilliseconds();

@@ -21,7 +21,7 @@ void	take_forks(t_philo *p, pthread_mutex_t *lfork, pthread_mutex_t *rfork)
 	{
 		// TO DO: Only 1 philosopher
 	}
-	if (p->id % 2 == 0)
+	else if (p->id % 2 == 0)
 	{
 		// Even id: start taking LEFT fork
 		pthread_mutex_lock(lfork);
