@@ -24,12 +24,19 @@
 # define LEFT 0
 # define R 1
 # define RIGHT 1
-# define TAKE_FORK 1
-# define EAT 2
-# define DOWN_FORK 3
-# define SLEEP 4
-# define THINK 5
-# define DIE 6
+
+//# define TAKE_FORK 1
+//# define EAT 2
+//# define DOWN_FORK 3
+//# define SLEEP 4
+//# define THINK 5
+//# define DIE 6
+
+# define TAKE_FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define DIE "died"
 
 typedef struct s_config
 {
@@ -39,13 +46,14 @@ typedef struct s_config
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_loops;
+	pthread_t		observer_th;
 	struct s_philo	*philo_arr;
 }					t_config;
 
 typedef struct s_philo
 {
 	int				id;
-	pthread_t		thread;
+	pthread_t		philo_th;
 	pthread_mutex_t	fork;
 	t_config		*config;
 	//long			last_lunch_time;
@@ -58,8 +66,9 @@ int		init_config(t_config *config, int argc, char *argv[]);
 void	create_threads(t_config *config);
 void	take_forks(t_philo *p, pthread_mutex_t *fork[]);
 void	eat(t_philo *p);
-void	*routine(void *arg);
-void	timestamp(int id, int mode, long start);
+void	*philo_routine(void *arg);
+void	*obs_routine(void *arg);
+void	timestamp(int id, char *str, long start);
 long	getmilliseconds(void);
 void	ft_sleep_ms(int ms);
 int		ft_atoi(const char *str);

@@ -12,7 +12,7 @@
 
 #include "philosophers.h"
 
-/* - Create one thread per philosopher
+/* - Create observer thread and one thread per philosopher
 - Wait for each thread to finish */
 void	create_threads(t_config *config)
 {
@@ -20,20 +20,21 @@ void	create_threads(t_config *config)
 	t_philo	*p;
 
 	i = 0;
+	pthread_create(&config->observer_th, NULL, obs_routine, config);
 	while (i < config->total_philo)
 	{
 		p = &config->philo_arr[i];
-		pthread_create(&p->thread, NULL, routine, p);
-		printf("Created thread %d (philo %d)\n", i, i + 1);
+		pthread_create(&p->philo_th, NULL, philo_routine, p);
 		i++;
 	}
 	config->start_time = getmilliseconds();
 	i = 0;
 	while (i < config->total_philo)
 	{
-		pthread_join(config->philo_arr[i].thread, NULL);
+		pthread_join(config->philo_arr[i].philo_th, NULL);
 		i++;
 	}
+	pthread_join(config->observer_th, NULL);
 }
 
 int	main(int argc, char *argv[])

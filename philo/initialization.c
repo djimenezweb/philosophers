@@ -46,8 +46,7 @@ t_philo	*init_philo_array(t_config *config)
 }
 
 /* - Return an initialized `t_config` structure
-- Initialize array of philosophers
-- Set start time */
+- Initialize array of philosophers */
 int	init_config(t_config *config, int argc, char *argv[])
 {
 	config->total_philo = ft_atoi(argv[1]);

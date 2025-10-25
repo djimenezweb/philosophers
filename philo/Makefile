@@ -13,9 +13,10 @@
 NAME	=	philosophers
 CC		=	cc
 CFLAGS	=	-Wall -Werror -Wextra
-SRCS	=	cleanup.c initialization.c main.c routine.c \
+SRCS	=	cleanup.c initialization.c main.c observer.c routine.c \
 			timestamps.c validation.c
-OBJS	=	$(SRCS:.c=.o)
+OBJDIR	=	objs
+OBJS	=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
 ARGS	=	5 800 200 200 3
 
 all : $(NAME)
@@ -23,11 +24,13 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-%.o : %.c
+$(OBJDIR)/%.o : %.c
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
 	rm -f $(OBJS)
+	rmdir $(OBJDIR)
 	clear
 
 fclean : clean
@@ -35,10 +38,11 @@ fclean : clean
 
 re : fclean all
 
-run :
+run : $(NAME)
+	@echo 'make run ARGS="5 800 200 200 3"'
 	./$(NAME) $(ARGS)
 
-check :
+check : $(NAME)
 	valgrind --leak-check=full ./$(NAME) $(ARGS)
 
 .PHONY : all clean fclean re run check

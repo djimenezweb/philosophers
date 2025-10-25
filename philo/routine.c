@@ -12,6 +12,9 @@
 
 #include "philosophers.h"
 
+/* - If there's a single philosopher he takes fork and dies
+- Even philosophers start taking (locking) the LEFT fork
+- Odd philosophers start taking (locking) the RIGHT fork */
 void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 {
 	long	start_time;
@@ -44,6 +47,8 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 	}
 }
 
+/* Every philosopher takes their right fork, except for the last one,
+who takes the fork from the first philosopher */
 pthread_mutex_t	*right_fork(t_philo *p)
 {
 	if (p->id == p->config->total_philo - 1)
@@ -52,6 +57,10 @@ pthread_mutex_t	*right_fork(t_philo *p)
 		return (&p->config->philo_arr[p->id + 1].fork);
 }
 
+/* - Set left and right forks before eating
+- Take (lock) the forks
+- Wait the specified `tt_eat` time
+- Put down (unlock) the forks */
 void	eat(t_philo *p)
 {
 	pthread_mutex_t	*forks[2];
@@ -68,20 +77,21 @@ void	eat(t_philo *p)
 	pthread_mutex_unlock(forks[R]);
 }
 
-void	*routine(void *arg)
+/* - Wait until `start_time` is set
+- Run a limited amount of loops, indefinitely, or unil any philosopher dies
+- Hold even philosophers to let the odd ones start first
+- Call `eat`, `sleep` and `think` subroutines */
+void	*philo_routine(void *arg)
 {
 	t_philo	*p;
 	int		loop;
 
-	loop = 0;
 	p = (t_philo *)arg;
 	while (!p->config->start_time)
 		ft_sleep_ms(1);
+	loop = 0;
 	while (loop < p->config->max_loops)
 	{
-		printf(" = = = LOOP %d = = = \n", loop);
-		// Si es par se retrasa 1ms para que empiece más tarde
-		// pero no me gusta esta solución
 		if (p->id % 2 == 0)
 			ft_sleep_ms(1);
 

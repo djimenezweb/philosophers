@@ -20,23 +20,15 @@
 ◦ timestamp_in_ms X died
 Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
 y X con el numero del filósofo. */
-void	timestamp(int id, int mode, long start)
+
+/* Prints change in status and current milliseconds since the start 
+TODO: Lock mutex to make printf safer */
+void	timestamp(int id, char *str, long start)
 {
 	long	ms;
 
 	ms = getmilliseconds() - start;
-	if (mode == TAKE_FORK)
-		printf("%ld %d has taken a fork\n", ms, id);
-	else if (mode == EAT)
-		printf("%ld %d is eating\n", ms, id);
-	else if (mode == DOWN_FORK)
-		printf("%ld %d puts down fork\n", ms, id);
-	else if (mode == SLEEP)
-		printf("%ld %d is sleeping\n", ms, id);
-	else if (mode == THINK)
-		printf("%ld %d is thinking\n", ms, id);
-	else if (mode == DIE)
-		printf("%ld %d died\n", ms, id);
+	printf("%ld %d %s\n", ms, id, str);
 }
 
 /* Return current Epoch time in milliseconds */
