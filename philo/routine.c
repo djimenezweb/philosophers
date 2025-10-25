@@ -23,7 +23,7 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 	if (p->config->total_philo == 1)
 	{
 		pthread_mutex_lock(&p->fork);
-		timestamp(p->id, TAKE_FORK, start_time);
+		timestamp(p->id, FORK, start_time);
 		ft_sleep_ms(p->config->tt_die);
 		// philosopher dies because he can't take the second fork
 		pthread_mutex_unlock(&p->fork);
@@ -32,18 +32,18 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 	else if (p->id % 2 == 0)
 	{
 		// Even id: start taking LEFT fork
-		pthread_mutex_lock(forks[L]);
-		timestamp(p->id, TAKE_FORK, start_time);
-		pthread_mutex_lock(forks[R]);
-		timestamp(p->id, TAKE_FORK, start_time);
+		pthread_mutex_lock(forks[LEFT]);
+		timestamp(p->id, FORK, start_time);
+		pthread_mutex_lock(forks[RIGHT]);
+		timestamp(p->id, FORK, start_time);
 	}
 	else
 	{
 		// Odd id: start taking RIGHT fork
-		pthread_mutex_lock(forks[R]);
-		timestamp(p->id, TAKE_FORK, start_time);
-		pthread_mutex_lock(forks[L]);
-		timestamp(p->id, TAKE_FORK, start_time);
+		pthread_mutex_lock(forks[RIGHT]);
+		timestamp(p->id, FORK, start_time);
+		pthread_mutex_lock(forks[LEFT]);
+		timestamp(p->id, FORK, start_time);
 	}
 }
 
@@ -66,15 +66,15 @@ void	eat(t_philo *p)
 	pthread_mutex_t	*forks[2];
 
 	// SET FORKS:
-	forks[L] = &p->fork;
-	forks[R] = right_fork(p);
+	forks[LEFT] = &p->fork;
+	forks[RIGHT] = right_fork(p);
 	// TAKE FORKS:
 	take_forks(p, forks);
 	timestamp(p->id, EAT, p->config->start_time);
 	ft_sleep_ms(p->config->tt_eat);
 	// PUT DOWN FORKS:
-	pthread_mutex_unlock(forks[L]);
-	pthread_mutex_unlock(forks[R]);
+	pthread_mutex_unlock(forks[LEFT]);
+	pthread_mutex_unlock(forks[RIGHT]);
 }
 
 /* - Wait until `start_time` is set

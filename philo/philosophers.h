@@ -20,19 +20,9 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-# define L 0
 # define LEFT 0
-# define R 1
 # define RIGHT 1
-
-//# define TAKE_FORK 1
-//# define EAT 2
-//# define DOWN_FORK 3
-//# define SLEEP 4
-//# define THINK 5
-//# define DIE 6
-
-# define TAKE_FORK "has taken a fork"
+# define FORK "has taken a fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
