@@ -16,7 +16,7 @@ CFLAGS	=	-Wall -Werror -Wextra
 SRCS	=	cleanup.c initialization.c main.c routine.c \
 			timestamps.c validation.c
 OBJS	=	$(SRCS:.c=.o)
-ARGS	=	5 800 200 200
+ARGS	=	5 800 200 200 3
 
 all : $(NAME)
 
@@ -39,6 +39,6 @@ run :
 	./$(NAME) $(ARGS)
 
 check :
-	valgrind ./$(NAME) $(ARGS)
+	valgrind --leak-check=full ./$(NAME) $(ARGS)
 
 .PHONY : all clean fclean re run check

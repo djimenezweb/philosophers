@@ -71,12 +71,15 @@ void	eat(t_philo *p)
 void	*routine(void *arg)
 {
 	t_philo	*p;
+	int		loop;
 
+	loop = 0;
 	p = (t_philo *)arg;
 	while (!p->config->start_time)
 		ft_sleep_ms(1);
-	while (1)
+	while (loop < p->config->max_loops)
 	{
+		printf(" = = = LOOP %d = = = \n", loop);
 		// Si es par se retrasa 1ms para que empiece más tarde
 		// pero no me gusta esta solución
 		if (p->id % 2 == 0)
@@ -91,6 +94,8 @@ void	*routine(void *arg)
 
 		// THINK
 		timestamp(p->id, THINK, p->config->start_time);
+		
+		loop++;
 	}
 	return (NULL);
 }

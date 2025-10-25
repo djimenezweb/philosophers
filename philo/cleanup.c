@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philosophers.h"
+#include <pthread.h>
 
 void	cleanup(t_config *config)
 {
@@ -19,19 +20,11 @@ void	cleanup(t_config *config)
 
 	i = 0;
 	n = config->total_philo;
-	if (config->philo_arr)
-	{
-		free(config->philo_arr);
-		config->philo_arr = NULL;
-	}
 	while (i < n)
 	{
-		//pthread_mutex_destroy(&config->forks[i]);
+		pthread_mutex_destroy(&config->philo_arr[i].fork);
 		i++;
 	}
-/* 	if (config->forks)
-	{
-		free(config->forks);
-		config->forks = NULL;
-	} */
+	free(config->philo_arr);
+	config->philo_arr = NULL;
 }
