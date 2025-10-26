@@ -12,65 +12,63 @@
 
 #include "philosophers.h"
 
-/* - Assign `id` and reference to `config` to each philosopher
-- Set `last_lunch` to an absurdly high time
-- Initalize fork mutex
+/* - Assign `id` and reference to `ctx` to each philosopher
+- Set `last_lunch` to current time
+- Initalize `fork_mtx` mutex
 - Initialize `last_lunch_mtx` mutex
 - Return philosopher */
-t_philo	init_philo(t_config *config, int id)
+t_philo	init_philo(t_ctx *ctx, int id)
 {
 	t_philo	p;
 
 	p.id = id;
-	p.config = config;
-	p.is_dead = 0;
-	p.last_lunch = 1800000000000;
-	pthread_mutex_init(&p.fork, NULL);
+	p.ctx = ctx;
+	p.last_lunch = get_current_ms();
+	pthread_mutex_init(&p.fork_mtx, NULL);
 	pthread_mutex_init(&p.last_lunch_mtx, NULL);
-	pthread_mutex_init(&p.is_dead_mtx, NULL);
 	return (p);
 }
 
 /* Allocate memory and return an array of initialized philosophers */
-t_philo	*init_philo_array(t_config *config)
+t_philo	*init_philo_array(t_ctx *ctx)
 {
 	int		i;
 	int		n;
 	t_philo	*arr;
 
-	n = config->total_philo;
+	n = ctx->n;
 	arr = (t_philo *)malloc(sizeof(t_philo) * n);
 	if (!arr)
 		return (NULL);
 	i = 0;
 	while (i < n)
 	{
-		arr[i] = init_philo(config, i + 1);
+		arr[i] = init_philo(ctx, i + 1);
 		i++;
 	}
 	return (arr);
 }
 
-/* - Initialize `t_config` structure
+/* - Initialize `t_ctx` structure
 - Initialize array of philosophers 
 - Initialize `stop_mtx` and `safe_print_mtx` mutexes
 - Return `0` on success, `-1` on error*/
-int	init_config(t_config *config, int argc, char *argv[])
+int	init_config(t_ctx *ctx, int argc, char *argv[])
 {
-	config->total_philo = ft_atoi(argv[1]);
-	config->tt_die = ft_atoi(argv[2]);
-	config->tt_eat = ft_atoi(argv[3]);
-	config->tt_sleep = ft_atoi(argv[4]);
+	ctx->n = ft_atoi(argv[1]);
+	ctx->tt_die = ft_atoi(argv[2]);
+	ctx->tt_eat = ft_atoi(argv[3]);
+	ctx->tt_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		config->max_loops = ft_atoi(argv[5]);
+		ctx->max_loops = ft_atoi(argv[5]);
 	else
-		config->max_loops = -1;
-	config->philo_arr = init_philo_array(config);
-	if (!config->philo_arr)
+		ctx->max_loops = -1;
+	ctx->philo_arr = init_philo_array(ctx);
+	if (!ctx->philo_arr)
 		return (-1);
-	config->start_time = 0;
-	config->stop_val = 0;
-	pthread_mutex_init(&config->stop_mtx, NULL);
-	pthread_mutex_init(&config->safe_print_mtx, NULL);
+	ctx->start_time = get_current_ms();
+	ctx->stop = 0;
+	pthread_mutex_init(&ctx->stop_mtx, NULL);
+	pthread_mutex_init(&ctx->safe_print_mtx, NULL);
 	return (0);
 }

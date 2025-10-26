@@ -17,42 +17,42 @@
 - Set starting time after they are all created
 - Wait for philosopher and observer threads to finish
 - Call `cleanup` if thread creation or join fails */
-void	create_threads(t_config *config)
+void	create_threads(t_ctx *ctx)
 {
 	int		i;
 	t_philo	*p;
 
 	i = 0;
-	if (pthread_create(&config->observer_th, NULL, obs_routine, config) != 0)
-		cleanup(config);
-	while (i < config->total_philo)
+	if (pthread_create(&ctx->observer_thread, NULL, obs_routine, ctx) != 0)
+		cleanup(ctx);
+	while (i < ctx->n)
 	{
-		p = &config->philo_arr[i];
-		if (pthread_create(&p->philo_th, NULL, philo_routine, p) != 0)
-			cleanup(config);
+		p = &ctx->philo_arr[i];
+		if (pthread_create(&p->philo_thread, NULL, philo_routine, p) != 0)
+			cleanup(ctx);
 		i++;
 	}
-	config->start_time = getmilliseconds();
-	if (pthread_join(config->observer_th, NULL) != 0)
-		cleanup(config);
+	ctx->start_time = get_current_ms();
+	if (pthread_join(ctx->observer_thread, NULL) != 0)
+		cleanup(ctx);
 	i = 0;
-	while (i < config->total_philo)
+	while (i < ctx->n)
 	{
-		if (pthread_join(config->philo_arr[i].philo_th, NULL) != 0)
-			cleanup(config);
+		if (pthread_join(ctx->philo_arr[i].philo_thread, NULL) != 0)
+			cleanup(ctx);
 		i++;
 	}
 }
 
 int	main(int argc, char *argv[])
 {
-	t_config	config;
+	t_ctx	ctx;
 
 	if (arg_validation(argc, argv) < 0)
 		return (EXIT_FAILURE);
-	if (init_config(&config, argc, argv) < 0)
-		return (cleanup(&config), EXIT_FAILURE);
-	create_threads(&config);
-	cleanup(&config);
+	if (init_config(&ctx, argc, argv) < 0)
+		return (cleanup(&ctx), EXIT_FAILURE);
+	create_threads(&ctx);
+	cleanup(&ctx);
 	return (EXIT_SUCCESS);
 }

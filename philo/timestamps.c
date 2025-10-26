@@ -12,37 +12,24 @@
 
 #include "philosophers.h"
 
-/* Cualquier cambio de estado de un filósofo debe tener el siguiente formato:
-◦ timestamp_in_ms X has taken a fork
-◦ timestamp_in_ms X is eating
-◦ timestamp_in_ms X is sleeping
-◦ timestamp_in_ms X is thinking
-◦ timestamp_in_ms X died
-Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
-y X con el numero del filósofo. */
-
-void	safe_print(t_config *config, int id, char *str)
+/* - Lock `safe_print_mtx` mutex before printing
+- Check if simulation should stop
+- Print change in status and current milliseconds since the start
+- Unock mutex after printing
+*/
+void	safe_print(t_ctx *ctx, int id, char *str)
 {
 	long	ms;
 
-	pthread_mutex_lock(&config->safe_print_mtx);
-	ms = getmilliseconds() - config->start_time;
-	if (is_any_philo_dead(config) == 0)
+	pthread_mutex_lock(&ctx->safe_print_mtx);
+	ms = get_current_ms() - ctx->start_time;
+	if (should_stop(ctx) == 0)
 		printf("%ld %d %s\n", ms, id, str);
-	pthread_mutex_unlock(&config->safe_print_mtx);
+	pthread_mutex_unlock(&ctx->safe_print_mtx);
 }
 
-/* Prints change in status and current milliseconds since the start */
-/* void	timestamp(int id, char *str, long start)
-{
-	long	ms;
-
-	ms = getmilliseconds() - start;
-	printf("%ld %d %s\n", ms, id, str);
-} */
-
 /* Return current Epoch time in milliseconds */
-long	getmilliseconds(void)
+long	get_current_ms(void)
 {
 	struct timeval	tv;
 
@@ -51,7 +38,7 @@ long	getmilliseconds(void)
 }
 
 /* Suspend execution for an interval in milliseconds */
-void	ft_sleep_ms(int ms)
+void	sleep_ms(int ms)
 {
 	usleep(ms * 1000);
 }

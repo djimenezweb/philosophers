@@ -14,30 +14,25 @@
 
 /* Iterate through array of philosophers and check if anyone is dead
 - Lock `last_lunch_mtx` to protect read
-- If any philo is dead, set `stop_val` to `1` and return `1`
+- If any philo is dead, set `stop` to `1` and return `1`
 - Return `0` if every philosopher is alive */
-int	is_any_philo_dead(t_config *config)
+int	should_stop(t_ctx *ctx)
 {
 	int		i;
 	long	delta;
 
 	i = 0;
-	while (i < config->total_philo)
+	while (i < ctx->n)
 	{
-		pthread_mutex_lock(&config->philo_arr[i].last_lunch_mtx);
-		delta = getmilliseconds() - config->philo_arr[i].last_lunch;
-		pthread_mutex_unlock(&config->philo_arr[i].last_lunch_mtx);
-		if (delta >= config->tt_die)
+		pthread_mutex_lock(&ctx->philo_arr[i].last_lunch_mtx);
+		delta = get_current_ms() - ctx->philo_arr[i].last_lunch;
+		pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
+		if (delta >= ctx->tt_die)
 		{
-			set_is_dead(&config->philo_arr[i], 1);
-			ft_sleep_ms(2);
-			printf(" === Philo %d is dead ===\n", config->philo_arr[i].id);
-			ft_sleep_ms(2);
-		}
-		if (get_is_dead(&config->philo_arr[i]) == 1)
-		{
-			safe_print(config, config->philo_arr[i].id, DIE);
-			set_stop(config, 1);
+			safe_print(ctx, ctx->philo_arr[i].id, DIE);
+			pthread_mutex_lock(&ctx->stop_mtx);
+			ctx->stop = 1;
+			pthread_mutex_unlock(&ctx->stop_mtx);
 			return (1);
 		}
 		i++;
@@ -45,18 +40,15 @@ int	is_any_philo_dead(t_config *config)
 	return (0);
 }
 
-/* - Wait until `start_time` is set
-- Run until `is_any_philo_dead` returns `1` */
+/* Run until `should_stop` returns `1` */
 void	*obs_routine(void *arg)
 {
-	t_config	*config;
+	t_ctx	*ctx;
 
-	config = (t_config *)arg;
-	while (!config->start_time)
-		ft_sleep_ms(1);
+	ctx = (t_ctx *)arg;
 	while (1)
 	{
-		if (is_any_philo_dead(config) == 1)
+		if (should_stop(ctx) == 1)
 			break ;
 	}
 	return (NULL);

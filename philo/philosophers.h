@@ -28,55 +28,48 @@
 # define THINK "is thinking"
 # define DIE "died < = = = = = = = = = = = = = = = = = = = ="
 
-typedef struct s_config
+typedef struct s_ctx
 {
-	long			start_time;
-	int				total_philo;
+	int				n;
 	int				tt_die;
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_loops;
-	pthread_t		observer_th;
-	int				stop_val;
+	long			start_time;
+	pthread_t		observer_thread;
+	int				stop;
 	pthread_mutex_t	stop_mtx;
 	pthread_mutex_t	safe_print_mtx;
 	struct s_philo	*philo_arr;
-}					t_config;
+}					t_ctx;
 
 typedef struct s_philo
 {
 	int				id;
-	pthread_t		philo_th;
-	pthread_mutex_t	fork;
-	int				is_dead;
-	pthread_mutex_t	is_dead_mtx;
+	pthread_t		philo_thread;
+	pthread_mutex_t	fork_mtx;
 	long			last_lunch;
 	pthread_mutex_t	last_lunch_mtx;
-	t_config		*config;
+	t_ctx			*ctx;
+	//int			lunch_times;
 }					t_philo;
 
-void			cleanup(t_config *config);
-t_philo			init_philo(t_config *config, int id);
-t_philo			*init_philo_array(t_config *config);
-int				init_config(t_config *config, int argc, char *argv[]);
-void			create_threads(t_config *config);
-int				main(int argc, char *argv[]);
-void			set_last_lunch(t_philo *p);
-int				get_stop(t_config *config);
-void			set_stop(t_config *config, int value);
-int				get_is_dead(t_philo *p);
-void			set_is_dead(t_philo *p, int value);
-int				is_any_philo_dead(t_config *config);
-void			*obs_routine(void *arg);
-void			single_philo(pthread_mutex_t *fork, t_config *config);
-void			take_fork(pthread_mutex_t *fork, t_config *config, int id);
-pthread_mutex_t	*select_right_fork(t_philo *p);
-void			eat(t_philo *p);
-void			*philo_routine(void *arg);
-void			safe_print(t_config *config, int id, char *str);
-long			getmilliseconds(void);
-void			ft_sleep_ms(int ms);
-int				ft_atoi(const char *str);
-int				arg_validation(int argc, char *argv[]);
+void	cleanup(t_ctx *ctx);
+t_philo	init_philo(t_ctx *ctx, int id);
+t_philo	*init_philo_array(t_ctx *ctx);
+int		init_config(t_ctx *ctx, int argc, char *argv[]);
+void	create_threads(t_ctx *ctx);
+int		get_stop_value(t_ctx *ctx);
+int		should_stop(t_ctx *ctx);
+void	*obs_routine(void *arg);
+void	single_philo(pthread_mutex_t *fork, t_ctx *ctx);
+void	take_fork(pthread_mutex_t *fork, t_ctx *ctx, int id);
+void	eat(t_philo *p);
+void	*philo_routine(void *arg);
+void	safe_print(t_ctx *ctx, int id, char *str);
+long	get_current_ms(void);
+void	sleep_ms(int ms);
+int		ft_atoi(const char *str);
+int		arg_validation(int argc, char *argv[]);
 
 #endif
