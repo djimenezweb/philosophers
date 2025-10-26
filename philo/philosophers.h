@@ -63,7 +63,7 @@ int				main(int argc, char *argv[]);
 int				is_any_philo_dead(t_config *config);
 void			*obs_routine(void *arg);
 void			take_forks(t_philo *p, pthread_mutex_t *forks[]);
-pthread_mutex_t	*right_fork(t_philo *p);
+pthread_mutex_t	*set_right_fork(t_philo *p);
 void			philo_eat(t_philo *p);
 void			philo_sleep(t_philo *p);
 void			philo_think(t_philo *p);

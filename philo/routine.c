@@ -49,7 +49,7 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 
 /* Every philosopher takes their right fork, except for the last one,
 who takes the fork from the first philosopher */
-pthread_mutex_t	*right_fork(t_philo *p)
+pthread_mutex_t	*set_right_fork(t_philo *p)
 {
 	if (p->id == p->config->total_philo - 1)
 		return (&p->config->philo_arr[0].fork);
@@ -67,7 +67,7 @@ void	philo_eat(t_philo *p)
 
 	// SET FORKS:
 	forks[LEFT] = &p->fork;
-	forks[RIGHT] = right_fork(p);
+	forks[RIGHT] = set_right_fork(p);
 	// TAKE FORKS:
 	take_forks(p, forks);
 	timestamp(p->id, EAT, p->config->start_time);

@@ -14,13 +14,15 @@
 
 int	is_any_philo_dead(t_config *config)
 {
-	int i;
+	int		i;
+	long	delta;
 
 	i = 0;
 	while (i < config->total_philo)
 	{
 		pthread_mutex_lock(&config->philo_arr[i].last_lunch_mtx);
-		if (getmilliseconds() - config->philo_arr[i].last_lunch >= config->tt_die)
+		delta = getmilliseconds() - config->philo_arr[i].last_lunch;
+		if (delta >= config->tt_die)
 		{
 			config->philo_arr[i].is_dead = 1;
 			timestamp(config->philo_arr[i].id, DIE, config->start_time);
