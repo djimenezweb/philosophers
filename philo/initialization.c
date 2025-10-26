@@ -13,7 +13,9 @@
 #include "philosophers.h"
 
 /* - Assign `id` and reference to `config` to each philosopher
+- Set `last_lunch` to an absurdly high time
 - Initalize fork mutex
+- Initialize `last_lunch_mtx` mutex
 - Return philosopher */
 t_philo	init_philo(t_config *config, int id)
 {
@@ -21,7 +23,10 @@ t_philo	init_philo(t_config *config, int id)
 
 	p.id = id;
 	p.config = config;
+	p.is_dead = 0;
+	p.last_lunch = 1800000000000;
 	pthread_mutex_init(&p.fork, NULL);
+	pthread_mutex_init(&p.last_lunch_mtx, NULL);
 	return (p);
 }
 

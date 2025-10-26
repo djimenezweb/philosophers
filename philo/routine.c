@@ -91,22 +91,22 @@ void	philo_think(t_philo *p)
 /* - Read mutex-protected `stop_val` and returns it
 - If it's `0`, simulation should continue
 - If it's `1`, simulation should stop */
-int	get_stop(t_philo *p)
+int	get_stop(t_config *config)
 {
 	int	value;
 
-	pthread_mutex_lock(&p->config->stop_mtx);
-	value = p->config->stop_val;
-	pthread_mutex_unlock(&p->config->stop_mtx);
+	pthread_mutex_lock(&config->stop_mtx);
+	value = config->stop_val;
+	pthread_mutex_unlock(&config->stop_mtx);
 	return (value);
 }
 
 /* Modify mutex-protected `stop_val` */
-void	set_stop(t_philo *p, int value)
+void	set_stop(t_config *config, int value)
 {
-	pthread_mutex_lock(&p->config->stop_mtx);
-	p->config->stop_val = value;
-	pthread_mutex_unlock(&p->config->stop_mtx);
+	pthread_mutex_lock(&config->stop_mtx);
+	config->stop_val = value;
+	pthread_mutex_unlock(&config->stop_mtx);
 }
 
 /* - Wait until `start_time` is set
@@ -120,7 +120,7 @@ void	*philo_routine(void *arg)
 	p = (t_philo *)arg;
 	while (!p->config->start_time)
 		ft_sleep_ms(1);
-	while (get_stop(p) == 0)
+	while (get_stop(p->config) == 0)
 	{
 		if (p->id % 2 == 0)
 			ft_sleep_ms(1);

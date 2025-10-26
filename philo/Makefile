@@ -17,7 +17,7 @@ SRCS	=	cleanup.c initialization.c main.c observer.c routine.c \
 			timestamps.c validation.c
 OBJDIR	=	objs
 OBJS	=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
-ARGS	=	5 800 200 200 3
+ARGS	=	5 800 200 200
 
 all : $(NAME)
 
@@ -39,7 +39,7 @@ fclean : clean
 re : fclean all
 
 run : $(NAME)
-	@echo 'make run ARGS="5 800 200 200 3"'
+	@echo 'make run ARGS="$(ARGS)"'
 	./$(NAME) $(ARGS)
 
 check : $(NAME)
