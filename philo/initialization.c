@@ -52,7 +52,7 @@ t_philo	*init_philo_array(t_config *config)
 
 /* - Initialize `t_config` structure
 - Initialize array of philosophers 
-- Initialize `abort_m` mutex
+- Initialize `stop_mtx` and `safe_print_mtx` mutexes
 - Return `0` on success, `-1` on error*/
 int	init_config(t_config *config, int argc, char *argv[])
 {
@@ -70,5 +70,6 @@ int	init_config(t_config *config, int argc, char *argv[])
 	config->start_time = 0;
 	config->stop_val = 0;
 	pthread_mutex_init(&config->stop_mtx, NULL);
+	pthread_mutex_init(&config->safe_print_mtx, NULL);
 	return (0);
 }

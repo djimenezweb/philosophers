@@ -12,6 +12,10 @@
 
 #include "philosophers.h"
 
+/* Iterate through array of philosophers and check if anyone is dead
+- Lock `last_lunch_mtx` to protect read
+- If any philo is dead, set `stop_val` to `1` and return `1`
+- Return `0` if every philosopher is alive */
 int	is_any_philo_dead(t_config *config)
 {
 	int		i;
@@ -25,7 +29,10 @@ int	is_any_philo_dead(t_config *config)
 		if (delta >= config->tt_die)
 		{
 			config->philo_arr[i].is_dead = 1;
-			timestamp(config->philo_arr[i].id, DIE, config->start_time);
+		}
+		if (config->philo_arr[i].is_dead == 1)
+		{
+			safe_print(config, config->philo_arr[i].id, DIE);
 			set_stop(config, 1);
 			pthread_mutex_unlock(&config->philo_arr[i].last_lunch_mtx);
 			return (1);
@@ -36,11 +43,15 @@ int	is_any_philo_dead(t_config *config)
 	return (0);
 }
 
+/* - Wait until `start_time` is set
+- Run until `is_any_philo_dead` returns `1` */
 void	*obs_routine(void *arg)
 {
 	t_config	*config;
 
 	config = (t_config *)arg;
+	while (!config->start_time)
+		ft_sleep_ms(1);
 	while (1)
 	{
 		if (is_any_philo_dead(config) == 1)

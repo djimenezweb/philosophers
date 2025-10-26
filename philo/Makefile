@@ -1,4 +1,4 @@
-# **************************************************************************** #
+#******************************************************************************#
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,15 +6,15 @@
 #    By: danielji <danielji@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/24 09:07:40 by danielji          #+#    #+#              #
-#    Updated: 2025/10/24 09:08:01 by danielji         ###   ########.fr        #
+#    Updated: 2025/10/26 15:34:13 by danielji         ###   ########.fr        #
 #                                                                              #
-# **************************************************************************** #
+#******************************************************************************#
 
 NAME	=	philosophers
 CC		=	cc
 CFLAGS	=	-Wall -Werror -Wextra
-SRCS	=	cleanup.c initialization.c main.c observer.c routine.c \
-			timestamps.c validation.c
+SRCS	=	cleanup.c initialization.c main.c mutexes.c observer.c\
+			philo_routine.c timestamps.c validation.c
 OBJDIR	=	objs
 OBJS	=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
 ARGS	=	5 800 200 200

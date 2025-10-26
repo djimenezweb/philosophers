@@ -21,15 +21,25 @@
 Reemplaza timestamp_in_ms con la marca de tiempo actual en milisegundos
 y X con el numero del filósofo. */
 
-/* Prints change in status and current milliseconds since the start 
-TODO: Lock mutex to make printf safer */
-void	timestamp(int id, char *str, long start)
+void	safe_print(t_config *config, int id, char *str)
+{
+	long	ms;
+
+	pthread_mutex_lock(&config->safe_print_mtx);
+	ms = getmilliseconds() - config->start_time;
+	if (is_any_philo_dead(config) == 0)
+		printf("%ld %d %s\n", ms, id, str);
+	pthread_mutex_unlock(&config->safe_print_mtx);
+}
+
+/* Prints change in status and current milliseconds since the start */
+/* void	timestamp(int id, char *str, long start)
 {
 	long	ms;
 
 	ms = getmilliseconds() - start;
 	printf("%ld %d %s\n", ms, id, str);
-}
+} */
 
 /* Return current Epoch time in milliseconds */
 long	getmilliseconds(void)
