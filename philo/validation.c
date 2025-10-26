@@ -31,17 +31,21 @@ int	ft_atoi(const char *str)
 	return ((int)nbr);
 }
 
-/* Return `1` if program arguments are valid numbers. */
+/* Validate arguments: return `0` on success, `-1` on error
+- Validation fails if too few arguments are passed
+- Validation fails if arguments are not valid numbers */
 int	arg_validation(int argc, char *argv[])
 {
 	int	i;
 
+	if (argc <= 4)
+		return (-1);
 	i = 1;
 	while (i < argc)
 	{
 		if (ft_atoi(argv[i]) < 0)
-			return (0);
+			return (-1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
