@@ -27,6 +27,7 @@ t_philo	init_philo(t_config *config, int id)
 	p.last_lunch = 1800000000000;
 	pthread_mutex_init(&p.fork, NULL);
 	pthread_mutex_init(&p.last_lunch_mtx, NULL);
+	pthread_mutex_init(&p.is_dead_mtx, NULL);
 	return (p);
 }
 

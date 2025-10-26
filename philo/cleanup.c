@@ -23,9 +23,12 @@ void	cleanup(t_config *config)
 	while (i < n)
 	{
 		pthread_mutex_destroy(&config->philo_arr[i].fork);
+		pthread_mutex_destroy(&config->philo_arr[i].is_dead_mtx);
+		pthread_mutex_destroy(&config->philo_arr[i].last_lunch_mtx);
 		i++;
 	}
 	free(config->philo_arr);
 	pthread_mutex_destroy(&config->stop_mtx);
+	pthread_mutex_destroy(&config->safe_print_mtx);
 	config->philo_arr = NULL;
 }

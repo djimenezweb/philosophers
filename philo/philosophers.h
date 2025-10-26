@@ -46,9 +46,10 @@ typedef struct s_config
 typedef struct s_philo
 {
 	int				id;
-	int				is_dead;
 	pthread_t		philo_th;
 	pthread_mutex_t	fork;
+	int				is_dead;
+	pthread_mutex_t	is_dead_mtx;
 	long			last_lunch;
 	pthread_mutex_t	last_lunch_mtx;
 	t_config		*config;
@@ -58,12 +59,13 @@ void			cleanup(t_config *config);
 t_philo			init_philo(t_config *config, int id);
 t_philo			*init_philo_array(t_config *config);
 int				init_config(t_config *config, int argc, char *argv[]);
-void			join_threads(t_config *config);
 void			create_threads(t_config *config);
 int				main(int argc, char *argv[]);
-int				get_stop(t_config *config);
 void			set_last_lunch(t_philo *p);
+int				get_stop(t_config *config);
 void			set_stop(t_config *config, int value);
+int				get_is_dead(t_philo *p);
+void			set_is_dead(t_philo *p, int value);
 int				is_any_philo_dead(t_config *config);
 void			*obs_routine(void *arg);
 void			single_philo(pthread_mutex_t *fork, t_config *config);

@@ -26,18 +26,20 @@ int	is_any_philo_dead(t_config *config)
 	{
 		pthread_mutex_lock(&config->philo_arr[i].last_lunch_mtx);
 		delta = getmilliseconds() - config->philo_arr[i].last_lunch;
+		pthread_mutex_unlock(&config->philo_arr[i].last_lunch_mtx);
 		if (delta >= config->tt_die)
 		{
-			config->philo_arr[i].is_dead = 1;
+			set_is_dead(&config->philo_arr[i], 1);
+			ft_sleep_ms(2);
+			printf(" === Philo %d is dead ===\n", config->philo_arr[i].id);
+			ft_sleep_ms(2);
 		}
-		if (config->philo_arr[i].is_dead == 1)
+		if (get_is_dead(&config->philo_arr[i]) == 1)
 		{
 			safe_print(config, config->philo_arr[i].id, DIE);
 			set_stop(config, 1);
-			pthread_mutex_unlock(&config->philo_arr[i].last_lunch_mtx);
 			return (1);
 		}
-		pthread_mutex_unlock(&config->philo_arr[i].last_lunch_mtx);
 		i++;
 	}
 	return (0);
