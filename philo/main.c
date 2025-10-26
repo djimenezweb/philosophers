@@ -12,44 +12,55 @@
 
 #include "philosophers.h"
 
-/* - Create observer thread and one thread per philosopher
-- Wait for each thread to finish */
+/* - Wait for philosopher and observer threads to finish
+- Call `cleanup` if thread join fails */
+void	join_threads(t_config *config)
+{
+	int	i;
+
+	i = 0;
+	while (i < config->total_philo)
+	{
+		if (pthread_join(config->philo_arr[i].philo_th, NULL) != 0)
+			cleanup(config);
+		i++;
+	}
+	if (pthread_join(config->observer_th, NULL) != 0)
+		cleanup(config);
+}
+
+/* - Create observer thread
+- Create one thread per philosopher
+- Call `cleanup` if thread creation fails
+- Set starting time after they are all created */
 void	create_threads(t_config *config)
 {
 	int		i;
 	t_philo	*p;
 
 	i = 0;
-	pthread_create(&config->observer_th, NULL, obs_routine, config);
+	if (pthread_create(&config->observer_th, NULL, obs_routine, config) != 0)
+		cleanup(config);
 	while (i < config->total_philo)
 	{
 		p = &config->philo_arr[i];
-		pthread_create(&p->philo_th, NULL, philo_routine, p);
+		if (pthread_create(&p->philo_th, NULL, philo_routine, p) != 0)
+			cleanup(config);
 		i++;
 	}
 	config->start_time = getmilliseconds();
-	i = 0;
-	while (i < config->total_philo)
-	{
-		pthread_join(config->philo_arr[i].philo_th, NULL);
-		i++;
-	}
-	pthread_join(config->observer_th, NULL);
 }
 
 int	main(int argc, char *argv[])
 {
-	int			status;
 	t_config	config;
 
-	if (argc <= 4)
+	if (arg_validation(argc, argv) < 0)
 		return (EXIT_FAILURE);
-	if (!arg_validation(argc, argv))
-		return (EXIT_FAILURE);
-	status = init_config(&config, argc, argv);
-	if (status < 0)
+	if (init_config(&config, argc, argv) < 0)
 		return (cleanup(&config), EXIT_FAILURE);
 	create_threads(&config);
+	join_threads(&config);
 	cleanup(&config);
 	return (EXIT_SUCCESS);
 }

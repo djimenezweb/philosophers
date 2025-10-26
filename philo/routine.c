@@ -23,7 +23,7 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 	if (p->config->total_philo == 1)
 	{
 		pthread_mutex_lock(&p->fork);
-		timestamp(p->id, FORK, start_time);
+		timestamp(p->id, TAKE_FORK, start_time);
 		ft_sleep_ms(p->config->tt_die);
 		// philosopher dies because he can't take the second fork
 		pthread_mutex_unlock(&p->fork);
@@ -33,17 +33,17 @@ void	take_forks(t_philo *p, pthread_mutex_t *forks[])
 	{
 		// Even id: start taking LEFT fork
 		pthread_mutex_lock(forks[LEFT]);
-		timestamp(p->id, FORK, start_time);
+		timestamp(p->id, TAKE_FORK, start_time);
 		pthread_mutex_lock(forks[RIGHT]);
-		timestamp(p->id, FORK, start_time);
+		timestamp(p->id, TAKE_FORK, start_time);
 	}
 	else
 	{
 		// Odd id: start taking RIGHT fork
 		pthread_mutex_lock(forks[RIGHT]);
-		timestamp(p->id, FORK, start_time);
+		timestamp(p->id, TAKE_FORK, start_time);
 		pthread_mutex_lock(forks[LEFT]);
-		timestamp(p->id, FORK, start_time);
+		timestamp(p->id, TAKE_FORK, start_time);
 	}
 }
 
@@ -61,7 +61,7 @@ pthread_mutex_t	*right_fork(t_philo *p)
 - Take (lock) the forks
 - Wait the specified `tt_eat` time
 - Put down (unlock) the forks */
-void	eat(t_philo *p)
+void	philo_eat(t_philo *p)
 {
 	pthread_mutex_t	*forks[2];
 
@@ -77,6 +77,38 @@ void	eat(t_philo *p)
 	pthread_mutex_unlock(forks[RIGHT]);
 }
 
+void	philo_sleep(t_philo *p)
+{
+	timestamp(p->id, SLEEP, p->config->start_time);
+	ft_sleep_ms(p->config->tt_sleep);
+}
+
+void	philo_think(t_philo *p)
+{
+	timestamp(p->id, THINK, p->config->start_time);
+}
+
+/* - Read mutex-protected `stop_val` and returns it
+- If it's `0`, simulation should continue
+- If it's `1`, simulation should stop */
+int	get_stop(t_philo *p)
+{
+	int	value;
+
+	pthread_mutex_lock(&p->config->stop_mtx);
+	value = p->config->stop_val;
+	pthread_mutex_unlock(&p->config->stop_mtx);
+	return (value);
+}
+
+/* Modify mutex-protected `stop_val` */
+void	set_stop(t_philo *p, int value)
+{
+	pthread_mutex_lock(&p->config->stop_mtx);
+	p->config->stop_val = value;
+	pthread_mutex_unlock(&p->config->stop_mtx);
+}
+
 /* - Wait until `start_time` is set
 - Run a limited amount of loops, indefinitely, or unil any philosopher dies
 - Hold even philosophers to let the odd ones start first
@@ -84,28 +116,17 @@ void	eat(t_philo *p)
 void	*philo_routine(void *arg)
 {
 	t_philo	*p;
-	int		loop;
 
 	p = (t_philo *)arg;
 	while (!p->config->start_time)
 		ft_sleep_ms(1);
-	loop = 0;
-	while (loop < p->config->max_loops)
+	while (get_stop(p) == 0)
 	{
 		if (p->id % 2 == 0)
 			ft_sleep_ms(1);
-
-		// EAT
-		eat(p);
-
-		// SLEEP
-		timestamp(p->id, SLEEP, p->config->start_time);
-		ft_sleep_ms(p->config->tt_sleep);
-
-		// THINK
-		timestamp(p->id, THINK, p->config->start_time);
-		
-		loop++;
+		philo_eat(p);
+		philo_sleep(p);
+		philo_think(p);
 	}
 	return (NULL);
 }

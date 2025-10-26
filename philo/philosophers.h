@@ -22,7 +22,7 @@
 
 # define LEFT 0
 # define RIGHT 1
-# define FORK "has taken a fork"
+# define TAKE_FORK "has taken a fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
@@ -37,6 +37,8 @@ typedef struct s_config
 	int				tt_sleep;
 	int				max_loops;
 	pthread_t		observer_th;
+	int				stop_val;
+	pthread_mutex_t	stop_mtx;
 	struct s_philo	*philo_arr;
 }					t_config;
 
@@ -55,7 +57,11 @@ t_philo	*init_philo_array(t_config *config);
 int		init_config(t_config *config, int argc, char *argv[]);
 void	create_threads(t_config *config);
 void	take_forks(t_philo *p, pthread_mutex_t *fork[]);
-void	eat(t_philo *p);
+void	philo_eat(t_philo *p);
+void	philo_sleep(t_philo *p);
+void	philo_think(t_philo *p);
+int		get_stop(t_philo *p);
+void	set_stop(t_philo *p, int value);
 void	*philo_routine(void *arg);
 void	*obs_routine(void *arg);
 void	timestamp(int id, char *str, long start);

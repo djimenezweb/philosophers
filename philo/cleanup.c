@@ -26,5 +26,6 @@ void	cleanup(t_config *config)
 		i++;
 	}
 	free(config->philo_arr);
+	pthread_mutex_destroy(&config->stop_mtx);
 	config->philo_arr = NULL;
 }

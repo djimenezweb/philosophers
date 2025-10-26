@@ -45,8 +45,10 @@ t_philo	*init_philo_array(t_config *config)
 	return (arr);
 }
 
-/* - Return an initialized `t_config` structure
-- Initialize array of philosophers */
+/* - Initialize `t_config` structure
+- Initialize array of philosophers 
+- Initialize `abort_m` mutex
+- Return `0` on success, `-1` on error*/
 int	init_config(t_config *config, int argc, char *argv[])
 {
 	config->total_philo = ft_atoi(argv[1]);
@@ -61,5 +63,7 @@ int	init_config(t_config *config, int argc, char *argv[])
 	if (!config->philo_arr)
 		return (-1);
 	config->start_time = 0;
+	config->stop_val = 0;
+	pthread_mutex_init(&config->stop_mtx, NULL);
 	return (0);
 }
