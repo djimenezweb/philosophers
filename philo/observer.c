@@ -12,6 +12,8 @@
 
 #include "philosophers.h"
 
+// TODO: Una función que compruebe si todos los filos tienen `done == 1` 
+
 /* Iterate through array of philosophers and check if anyone is dead
 - Lock `last_lunch_mtx` to protect read
 - If any philo is dead, set `stop` to `1` and return `1`
