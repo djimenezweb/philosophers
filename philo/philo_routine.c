@@ -44,14 +44,15 @@ void	eat(t_philo *p)
 {
 	pthread_mutex_t	*forks[2];
 
-	forks[LEFT] = &p->ctx->philo_arr[p->id - 1].fork_mtx;
+	if (p->ctx->n == 1)
+		single_philo(&p->fork_mtx, p->ctx);
+
+	forks[LEFT] = &p->fork_mtx;
 	if (p->id == p->ctx->n)
 		forks[RIGHT] = &p->ctx->philo_arr[0].fork_mtx;
 	else
 		forks[RIGHT] = &p->ctx->philo_arr[p->id].fork_mtx;
 
-	//if (p->ctx->n == 1)
-	//	single_philo(left_fork, p->ctx);
 	if (p->id % 2 == 0)
 	{
 		take_fork(forks[LEFT], p->ctx, p->id);
