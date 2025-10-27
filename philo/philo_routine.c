@@ -47,6 +47,7 @@ void	eat(t_philo *p)
 	if (p->ctx->n == 1)
 		single_philo(&p->fork_mtx, p->ctx);
 
+	//forks[LEFT] = &p->ctx->philo_arr[p->id - 1].fork_mtx;
 	forks[LEFT] = &p->fork_mtx;
 	if (p->id == p->ctx->n)
 		forks[RIGHT] = &p->ctx->philo_arr[0].fork_mtx;
