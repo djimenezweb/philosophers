@@ -25,6 +25,11 @@ int	should_stop(t_ctx *ctx)
 	while (i < ctx->n)
 	{
 		pthread_mutex_lock(&ctx->philo_arr[i].last_lunch_mtx);
+		if (ctx->philo_arr[i].done == 1)
+		{
+			pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
+			return (1);
+		}
 		time_diff = get_current_ms() - ctx->philo_arr[i].last_lunch;
 		if (time_diff > ctx->tt_die)
 		{

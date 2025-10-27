@@ -78,6 +78,7 @@ void	eat(t_philo *p)
 	safe_print(p->ctx, p->id, EAT);
 	pthread_mutex_lock(&p->last_lunch_mtx);
 	p->last_lunch = get_current_ms();
+	p->loop = p->loop + 1;
 	pthread_mutex_unlock(&p->last_lunch_mtx);
 	sleep_ms(p->ctx->tt_eat);
 	put_down_forks(forks);
@@ -115,13 +116,35 @@ void	*philo_routine(void *arg)
 		sleep_ms(1);
 	// TODO: Retrasar filósofos pares o filósofo 3 si total 3
 	// TODO: delay es tt_eat, pero si tt_eat es mayor que tt_sleep, entonces delay es tt_sleep
+	int delay = p->ctx->tt_eat - 10;
+	if (p->ctx->tt_eat > p->ctx->tt_sleep)
+		delay = p->ctx->tt_sleep;
 	if (p->id % 2 == 0)
-		sleep_ms(p->ctx->tt_eat);
+		sleep_ms(delay);
 	if (p->ctx->n == 3 && p->id == 3)
-		sleep_ms(p->ctx->tt_eat);
+		sleep_ms(delay);
 	while (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 0)
 	{
+
+		pthread_mutex_lock(&p->last_lunch_mtx);
+		if ((p->ctx->max_loops) > 0 && (p->loop >= p->ctx->max_loops))
+		{
+			p->done = 1;
+			pthread_mutex_unlock(&p->last_lunch_mtx);
+			return (NULL);
+		}
+		pthread_mutex_unlock(&p->last_lunch_mtx);
+
 		eat(p);
+
+		pthread_mutex_lock(&p->last_lunch_mtx);
+		if ((p->ctx->max_loops) > 0 && (p->loop >= p->ctx->max_loops))
+		{
+			p->done = 1;
+			pthread_mutex_unlock(&p->last_lunch_mtx);
+			return (NULL);
+		}
+		pthread_mutex_unlock(&p->last_lunch_mtx);
 		if (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 1)
 			break ;
 		safe_print(p->ctx, p->id, SLEEP);
