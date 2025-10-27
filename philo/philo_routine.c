@@ -42,42 +42,33 @@ who takes the fork from the first philosopher
 - Put down (unlock) forks */
 void	eat(t_philo *p)
 {
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*forks[2];
 
-	left_fork = &p->ctx->philo_arr[p->id - 1].fork_mtx;
+	forks[LEFT] = &p->ctx->philo_arr[p->id - 1].fork_mtx;
 	if (p->id == p->ctx->n)
-		right_fork = &p->ctx->philo_arr[0].fork_mtx;
+		forks[RIGHT] = &p->ctx->philo_arr[0].fork_mtx;
 	else
-		right_fork = &p->ctx->philo_arr[p->id].fork_mtx;
+		forks[RIGHT] = &p->ctx->philo_arr[p->id].fork_mtx;
 
 	//if (p->ctx->n == 1)
 	//	single_philo(left_fork, p->ctx);
 	if (p->id % 2 == 0)
 	{
-		take_fork(left_fork, p->ctx, p->id);
-		take_fork(right_fork, p->ctx, p->id);
-		//pthread_mutex_lock(left_fork);
-		//safe_print(p->ctx, p->id, TAKE_L_FORK);
-		//pthread_mutex_lock(right_fork);
-		//safe_print(p->ctx, p->id, TAKE_R_FORK);
+		take_fork(forks[LEFT], p->ctx, p->id);
+		take_fork(forks[RIGHT], p->ctx, p->id);
 	}
 	else
 	{
-		take_fork(right_fork, p->ctx, p->id);
-		take_fork(left_fork, p->ctx, p->id);
-		//pthread_mutex_lock(right_fork);
-		//safe_print(p->ctx, p->id, TAKE_R_FORK);
-		//pthread_mutex_lock(left_fork);
-		//safe_print(p->ctx, p->id, TAKE_L_FORK);
+		take_fork(forks[RIGHT], p->ctx, p->id);
+		take_fork(forks[LEFT], p->ctx, p->id);
 	}
 	safe_print(p->ctx, p->id, EAT);
 	pthread_mutex_lock(&p->last_lunch_mtx);
 	p->last_lunch = get_current_ms();
 	pthread_mutex_unlock(&p->last_lunch_mtx);
 	sleep_ms(p->ctx->tt_eat);
-	pthread_mutex_unlock(left_fork);
-	pthread_mutex_unlock(right_fork);
+	pthread_mutex_unlock(forks[LEFT]);
+	pthread_mutex_unlock(forks[RIGHT]);
 }
 
 /* - Read mutex-protected `stop` and return it
