@@ -18,17 +18,44 @@ void	single_philo(pthread_mutex_t *fork, t_ctx *ctx)
 	pthread_mutex_lock(fork);
 	safe_print(ctx, 1, TAKE_FORK);
 	sleep_ms(ctx->tt_die);
-	//ctx->philo_arr[0].is_dead = 1;
 	safe_print(ctx, ctx->philo_arr[0].id, DIE);
 	pthread_mutex_unlock(fork);
 	return ;
 }
 
-/* Take (mutex lock) fork */
+/* Take fork (lock mutex) */
 void	take_fork(pthread_mutex_t *fork, t_ctx *ctx, int id)
 {
 	pthread_mutex_lock(fork);
 	safe_print(ctx, id, TAKE_FORK);
+}
+
+/* Put down fork (unlock mutex) */
+void	put_down_forks(pthread_mutex_t *forks[])
+{
+	pthread_mutex_unlock(forks[LEFT]);
+	pthread_mutex_unlock(forks[RIGHT]);
+}
+
+/* Select forks and take them */
+void	take_forks(t_philo *p, pthread_mutex_t *forks[])
+{
+	forks[LEFT] = &p->fork_mtx;
+	if (p->id == p->ctx->n)
+		forks[RIGHT] = &p->ctx->philo_arr[0].fork_mtx;
+	else
+		forks[RIGHT] = &p->ctx->philo_arr[p->id].fork_mtx;
+
+	if (p->id % 2 == 0)
+	{
+		take_fork(forks[LEFT], p->ctx, p->id);
+		take_fork(forks[RIGHT], p->ctx, p->id);
+	}
+	else
+	{
+		take_fork(forks[RIGHT], p->ctx, p->id);
+		take_fork(forks[LEFT], p->ctx, p->id);
+	}
 }
 
 /* - Select left and right forks before eating
@@ -47,30 +74,13 @@ void	eat(t_philo *p)
 	if (p->ctx->n == 1)
 		single_philo(&p->fork_mtx, p->ctx);
 
-	//forks[LEFT] = &p->ctx->philo_arr[p->id - 1].fork_mtx;
-	forks[LEFT] = &p->fork_mtx;
-	if (p->id == p->ctx->n)
-		forks[RIGHT] = &p->ctx->philo_arr[0].fork_mtx;
-	else
-		forks[RIGHT] = &p->ctx->philo_arr[p->id].fork_mtx;
-
-	if (p->id % 2 == 0)
-	{
-		take_fork(forks[LEFT], p->ctx, p->id);
-		take_fork(forks[RIGHT], p->ctx, p->id);
-	}
-	else
-	{
-		take_fork(forks[RIGHT], p->ctx, p->id);
-		take_fork(forks[LEFT], p->ctx, p->id);
-	}
+	take_forks(p, forks);
 	safe_print(p->ctx, p->id, EAT);
 	pthread_mutex_lock(&p->last_lunch_mtx);
 	p->last_lunch = get_current_ms();
 	pthread_mutex_unlock(&p->last_lunch_mtx);
 	sleep_ms(p->ctx->tt_eat);
-	pthread_mutex_unlock(forks[LEFT]);
-	pthread_mutex_unlock(forks[RIGHT]);
+	put_down_forks(forks);
 }
 
 /* - Read mutex-protected `stop` and return it
@@ -103,7 +113,11 @@ void	*philo_routine(void *arg)
 	p = (t_philo *)arg;
 	while (get_mutex_value(&p->ctx->start_mtx, &p->ctx->start) == 0)
 		sleep_ms(1);
+	// TODO: Retrasar filósofos pares o filósofo 3 si total 3
+	// TODO: delay es tt_eat, pero si tt_eat es mayor que tt_sleep, entonces delay es tt_sleep
 	if (p->id % 2 == 0)
+		sleep_ms(p->ctx->tt_eat);
+	if (p->ctx->n == 3 && p->id == 3)
 		sleep_ms(p->ctx->tt_eat);
 	while (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 0)
 	{
