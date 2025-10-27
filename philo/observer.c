@@ -19,22 +19,23 @@
 int	should_stop(t_ctx *ctx)
 {
 	int		i;
-	long	delta;
+	long	time_diff;
 
 	i = 0;
 	while (i < ctx->n)
 	{
 		pthread_mutex_lock(&ctx->philo_arr[i].last_lunch_mtx);
-		delta = get_current_ms() - ctx->philo_arr[i].last_lunch;
-		pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
-		if (delta >= ctx->tt_die)
+		time_diff = get_current_ms() - ctx->philo_arr[i].last_lunch;
+		if (time_diff > ctx->tt_die)
 		{
+			pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
 			safe_print(ctx, ctx->philo_arr[i].id, DIE);
 			pthread_mutex_lock(&ctx->stop_mtx);
 			ctx->stop = 1;
 			pthread_mutex_unlock(&ctx->stop_mtx);
 			return (1);
 		}
+		pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
 		i++;
 	}
 	return (0);
