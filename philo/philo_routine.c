@@ -115,7 +115,6 @@ void	*philo_routine(void *arg)
 		if (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 1)
 			break ;
 		safe_print(p->ctx, p->id, THINK);
-		//sleep_ms(p->ctx->tt_die - p->ctx->tt_eat - p->ctx->tt_sleep - 20);
 	}
 	return (NULL);
 }
