@@ -24,6 +24,8 @@ t_philo	init_philo(t_ctx *ctx, int id)
 	p.id = id;
 	p.ctx = ctx;
 	p.last_lunch = get_current_ms();
+	p.loop = 0;
+	p.done = 1;
 	pthread_mutex_init(&p.fork_mtx, NULL);
 	pthread_mutex_init(&p.last_lunch_mtx, NULL);
 	return (p);
