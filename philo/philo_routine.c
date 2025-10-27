@@ -76,15 +76,10 @@ void	eat(t_philo *p)
 /* - Read mutex-protected `stop` and return it
 - If it's `0`, simulation should continue
 - If it's `1`, simulation should stop */
-/* int	get_stop_value(t_ctx *ctx)
+int	get_stop_value(t_ctx *ctx)
 {
-	int	value;
-
-	pthread_mutex_lock(&ctx->stop_mtx);
-	value = ctx->stop;
-	pthread_mutex_unlock(&ctx->stop_mtx);
-	return (value);
-} */
+	return (get_mutex_value(&ctx->stop_mtx, &ctx->stop));
+}
 
 /* Return mutex-protected int `value` */
 int	get_mutex_value(pthread_mutex_t *mtx, int *ptr)
