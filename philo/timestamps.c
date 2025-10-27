@@ -13,18 +13,15 @@
 #include "philosophers.h"
 
 /* - Lock `safe_print_mtx` mutex before printing
-- Check if simulation should stop
 - Print change in status and current milliseconds since the start
-- Unock mutex after printing
-*/
+- Unock mutex after printing */
 void	safe_print(t_ctx *ctx, int id, char *str)
 {
-	long	ms;
+	long	time_diff;
 
 	pthread_mutex_lock(&ctx->safe_print_mtx);
-	ms = get_current_ms() - ctx->start_time;
-	if (should_stop(ctx) == 0)
-		printf("%ld %d %s\n", ms, id, str);
+	time_diff = get_current_ms() - ctx->start_time;
+	printf("%ld %d %s\n", time_diff, id, str);
 	pthread_mutex_unlock(&ctx->safe_print_mtx);
 }
 
