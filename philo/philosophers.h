@@ -54,8 +54,9 @@ typedef struct s_philo
 	pthread_mutex_t	fork_mtx;
 	long			last_lunch;
 	pthread_mutex_t	last_lunch_mtx;
+	int				loop;
+	int				done;
 	t_ctx			*ctx;
-	//int			lunch_times;
 }					t_philo;
 
 void	cleanup(t_ctx *ctx);
@@ -63,7 +64,6 @@ t_philo	init_philo(t_ctx *ctx, int id);
 t_philo	*init_philo_array(t_ctx *ctx);
 int		init_config(t_ctx *ctx, int argc, char *argv[]);
 void	create_threads(t_ctx *ctx);
-//int	get_stop_value(t_ctx *ctx);
 int		get_mutex_value(pthread_mutex_t *mtx, int *ptr);
 int		should_stop(t_ctx *ctx);
 void	*obs_routine(void *arg);
