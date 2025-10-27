@@ -68,7 +68,9 @@ int	init_config(t_ctx *ctx, int argc, char *argv[])
 		return (-1);
 	ctx->start_time = get_current_ms();
 	ctx->stop = 0;
+	ctx->start = 0;
 	pthread_mutex_init(&ctx->stop_mtx, NULL);
+	pthread_mutex_init(&ctx->start_mtx, NULL);
 	pthread_mutex_init(&ctx->safe_print_mtx, NULL);
 	return (0);
 }

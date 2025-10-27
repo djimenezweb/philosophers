@@ -17,7 +17,7 @@ SRCS	=	cleanup.c initialization.c main.c observer.c\
 			philo_routine.c timestamps.c validation.c
 OBJDIR	=	objs
 OBJS	=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
-ARGS	=	5 800 200 200
+ARGS	=	6 800 200 200
 
 all : $(NAME)
 

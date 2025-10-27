@@ -32,7 +32,10 @@ void	create_threads(t_ctx *ctx)
 			cleanup(ctx);
 		i++;
 	}
-	ctx->start_time = get_current_ms();
+	//ctx->start_time = get_current_ms();
+	pthread_mutex_lock(&ctx->start_mtx);
+	ctx->start = 1;
+	pthread_mutex_unlock(&ctx->start_mtx);
 	if (pthread_join(ctx->observer_thread, NULL) != 0)
 		cleanup(ctx);
 	i = 0;

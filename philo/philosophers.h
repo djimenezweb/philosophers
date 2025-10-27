@@ -23,6 +23,8 @@
 # define LEFT 0
 # define RIGHT 1
 # define TAKE_FORK "has taken a fork"
+# define TAKE_L_FORK "has taken LEFT fork"
+# define TAKE_R_FORK "has taken RIGHT fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
@@ -39,6 +41,8 @@ typedef struct s_ctx
 	pthread_t		observer_thread;
 	int				stop;
 	pthread_mutex_t	stop_mtx;
+	int				start;
+	pthread_mutex_t	start_mtx;
 	pthread_mutex_t	safe_print_mtx;
 	struct s_philo	*philo_arr;
 }					t_ctx;
@@ -59,7 +63,8 @@ t_philo	init_philo(t_ctx *ctx, int id);
 t_philo	*init_philo_array(t_ctx *ctx);
 int		init_config(t_ctx *ctx, int argc, char *argv[]);
 void	create_threads(t_ctx *ctx);
-int		get_stop_value(t_ctx *ctx);
+//int	get_stop_value(t_ctx *ctx);
+int		get_mutex_value(pthread_mutex_t *mtx, int *ptr);
 int		should_stop(t_ctx *ctx);
 void	*obs_routine(void *arg);
 void	single_philo(pthread_mutex_t *fork, t_ctx *ctx);

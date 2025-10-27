@@ -42,38 +42,48 @@ who takes the fork from the first philosopher
 - Put down (unlock) forks */
 void	eat(t_philo *p)
 {
-	pthread_mutex_t	*forks[2];
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 
-	forks[LEFT] = &p->fork_mtx;
-	if (p->id == p->ctx->n - 1)
-		forks[RIGHT] = &p->ctx->philo_arr[0].fork_mtx;
+	left_fork = &p->ctx->philo_arr[p->id - 1].fork_mtx;
+	if (p->id == p->ctx->n)
+		right_fork = &p->ctx->philo_arr[0].fork_mtx;
 	else
-		forks[RIGHT] = &p->ctx->philo_arr[p->id + 1].fork_mtx;
-	if (p->ctx->n == 1)
-		single_philo(forks[LEFT], p->ctx);
-	else if (p->id % 2 == 0)
+		right_fork = &p->ctx->philo_arr[p->id].fork_mtx;
+
+	//if (p->ctx->n == 1)
+	//	single_philo(left_fork, p->ctx);
+	if (p->id % 2 == 0)
 	{
-		take_fork(forks[LEFT], p->ctx, p->id);
-		take_fork(forks[RIGHT], p->ctx, p->id);
+		take_fork(left_fork, p->ctx, p->id);
+		take_fork(right_fork, p->ctx, p->id);
+		//pthread_mutex_lock(left_fork);
+		//safe_print(p->ctx, p->id, TAKE_L_FORK);
+		//pthread_mutex_lock(right_fork);
+		//safe_print(p->ctx, p->id, TAKE_R_FORK);
 	}
 	else
 	{
-		take_fork(forks[RIGHT], p->ctx, p->id);
-		take_fork(forks[LEFT], p->ctx, p->id);
+		take_fork(right_fork, p->ctx, p->id);
+		take_fork(left_fork, p->ctx, p->id);
+		//pthread_mutex_lock(right_fork);
+		//safe_print(p->ctx, p->id, TAKE_R_FORK);
+		//pthread_mutex_lock(left_fork);
+		//safe_print(p->ctx, p->id, TAKE_L_FORK);
 	}
 	safe_print(p->ctx, p->id, EAT);
 	pthread_mutex_lock(&p->last_lunch_mtx);
 	p->last_lunch = get_current_ms();
 	pthread_mutex_unlock(&p->last_lunch_mtx);
 	sleep_ms(p->ctx->tt_eat);
-	pthread_mutex_unlock(forks[LEFT]);
-	pthread_mutex_unlock(forks[RIGHT]);
+	pthread_mutex_unlock(left_fork);
+	pthread_mutex_unlock(right_fork);
 }
 
 /* - Read mutex-protected `stop` and return it
 - If it's `0`, simulation should continue
 - If it's `1`, simulation should stop */
-int	get_stop_value(t_ctx *ctx)
+/* int	get_stop_value(t_ctx *ctx)
 {
 	int	value;
 
@@ -81,10 +91,21 @@ int	get_stop_value(t_ctx *ctx)
 	value = ctx->stop;
 	pthread_mutex_unlock(&ctx->stop_mtx);
 	return (value);
+} */
+
+/* Return mutex-protected int `value` */
+int	get_mutex_value(pthread_mutex_t *mtx, int *ptr)
+{
+	int	value;
+
+	pthread_mutex_lock(mtx);
+	value = *ptr;
+	pthread_mutex_unlock(mtx);
+	return (value);
 }
 
-/* - Wait until `start_time` is set
-- Run until `get_stop_value` returns `1`
+/* - Wait until `start` is set to `1`
+- Run until `stop` returns `1`
 - Hold even philosophers 1ms to let the odd ones start before
 - Call `eat`, `sleep` and `think` subroutines */
 void	*philo_routine(void *arg)
@@ -92,20 +113,21 @@ void	*philo_routine(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-	while (!p->ctx->start_time)
+	while (get_mutex_value(&p->ctx->start_mtx, &p->ctx->start) == 0)
 		sleep_ms(1);
-	while (get_stop_value(p->ctx) == 0)
+	if (p->id % 2 == 0)
+		sleep_ms(p->ctx->tt_eat);
+	while (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 0)
 	{
-		if (p->id % 2 == 0)
-			sleep_ms(1);
 		eat(p);
-		if (get_stop_value(p->ctx))
+		if (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 1)
 			break ;
 		safe_print(p->ctx, p->id, SLEEP);
 		sleep_ms(p->ctx->tt_sleep);
-		if (get_stop_value(p->ctx))
+		if (get_mutex_value(&p->ctx->stop_mtx, &p->ctx->stop) == 1)
 			break ;
 		safe_print(p->ctx, p->id, THINK);
+		//sleep_ms(p->ctx->tt_die - p->ctx->tt_eat - p->ctx->tt_sleep - 20);
 	}
 	return (NULL);
 }
