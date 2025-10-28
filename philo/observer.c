@@ -30,7 +30,7 @@ int	are_all_done(t_ctx *ctx)
 			pthread_mutex_unlock(&ctx->stop_mtx);
 			return (1);
 		}
-		if (ctx->philo_arr[i].done == 1)
+		if (get_done_value(&ctx->philo_arr[i]) == 1)
 			all_done++;
 		pthread_mutex_unlock(&ctx->stop_mtx);
 		i++;

@@ -19,14 +19,13 @@ void	take_fork(pthread_mutex_t *fork, t_ctx *ctx, int id)
 	safe_print(ctx, id, TAKE_FORK);
 }
 
-/* Put down fork (unlock mutex) */
-void	put_down_forks(pthread_mutex_t *forks[])
+/* Read mutex-protected `done` value */
+int	get_done_value(t_philo *p)
 {
-	pthread_mutex_unlock(forks[LEFT]);
-	pthread_mutex_unlock(forks[RIGHT]);
+	return (get_mutex_value(&p->last_lunch_mtx, &p->done));
 }
 
-/* Read mutex-protected `stop` and return it */
+/* Read mutex-protected `stop` value */
 int	get_stop_value(t_ctx *ctx)
 {
 	return (get_mutex_value(&ctx->stop_mtx, &ctx->stop));

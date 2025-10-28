@@ -61,7 +61,8 @@ void	eat(t_philo *p)
 		p->done = 1;
 	pthread_mutex_unlock(&p->last_lunch_mtx);
 	sleep_ms(p->ctx->tt_eat);
-	put_down_forks(forks);
+	pthread_mutex_unlock(forks[LEFT]);
+	pthread_mutex_unlock(forks[RIGHT]);
 }
 
 //TODO: POSIBLES APORTACIONES
