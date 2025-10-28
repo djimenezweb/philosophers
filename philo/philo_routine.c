@@ -51,6 +51,8 @@ void	eat(t_philo *p)
 {
 	pthread_mutex_t	*forks[2];
 
+	if (get_stop_value(p->ctx) == 1)
+		return ;
 	take_forks(p, forks);
 	safe_print(p->ctx, p->id, EAT);
 	pthread_mutex_lock(&p->last_lunch_mtx);
@@ -75,19 +77,19 @@ void	*philo_routine(void *arg)
 	p = (t_philo *)arg;
 	while (get_mutex_value(&p->ctx->start_mtx, &p->ctx->start) == 0)
 		usleep(10);
-	if (p->ctx->n == 1)
+/* 	if (p->ctx->n == 1)
 	{
 		single_philo(&p->fork_mtx, p->ctx);
 		return (NULL);
 	}
-	if (p->id % 2 == 0)
+	if (p->id % 2 == 0 || (p->ctx->n == 3 && p->id == 3))
 		sleep_ms(p->ctx->delay - 10);
-	if (p->ctx->n == 3 && p->id == 3)
-		sleep_ms(p->ctx->delay - 10);
+
+	if (p->id % 2 != 0 && p->id == p->ctx->n)
+		usleep(100); */
+
 	while (get_stop_value(p->ctx) == 0)
 	{
-		if (get_stop_value(p->ctx) == 1)
-			break ;
 		eat(p);
 		if (get_stop_value(p->ctx) == 1)
 			break ;
