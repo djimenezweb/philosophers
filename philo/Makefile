@@ -13,11 +13,11 @@
 NAME	=	philosophers
 CC		=	cc
 CFLAGS	=	-Wall -Werror -Wextra
-SRCS	=	cleanup.c initialization.c main.c observer.c\
-			philo_routine.c timestamps.c validation.c
+SRCS	=	init.c main.c mutexes.c observer.c philo_routine.c timestamps.c\
+			validation.c
 OBJDIR	=	objs
 OBJS	=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
-ARGS	=	6 1000 400 200 4
+ARGS	=	5 1000 400 200 4
 
 all : $(NAME)
 

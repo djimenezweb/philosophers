@@ -12,13 +12,37 @@
 
 #include "philosophers.h"
 
-// TODO: Una función que compruebe si todos los filos tienen `done == 1` 
+/* Iterate through array of philosophers and check if all of them are done
+- Lock `last_lunch_mtx` to protect read */
+int	are_all_done(t_ctx *ctx)
+{
+	int	i;
+	int	all_done;
+
+	i = 0;
+	all_done = 0;
+	while (i <= ctx->n)
+	{
+		pthread_mutex_lock(&ctx->stop_mtx);
+		if (all_done == ctx->n)
+		{
+			ctx->stop = 1;
+			pthread_mutex_unlock(&ctx->stop_mtx);
+			return (1);
+		}
+		if (ctx->philo_arr[i].done == 1)
+			all_done++;
+		pthread_mutex_unlock(&ctx->stop_mtx);
+		i++;
+	}
+	return (0);
+}
 
 /* Iterate through array of philosophers and check if anyone is dead
 - Lock `last_lunch_mtx` to protect read
 - If any philo is dead, set `stop` to `1` and return `1`
 - Return `0` if every philosopher is alive */
-int	should_stop(t_ctx *ctx)
+int	is_anyone_dead(t_ctx *ctx)
 {
 	int		i;
 	long	time_diff;
@@ -27,11 +51,6 @@ int	should_stop(t_ctx *ctx)
 	while (i < ctx->n)
 	{
 		pthread_mutex_lock(&ctx->philo_arr[i].last_lunch_mtx);
-		if (ctx->philo_arr[i].done == 1)
-		{
-			pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
-			return (1);
-		}
 		time_diff = get_current_ms() - ctx->philo_arr[i].last_lunch;
 		if (time_diff > ctx->tt_die)
 		{
@@ -48,7 +67,7 @@ int	should_stop(t_ctx *ctx)
 	return (0);
 }
 
-/* Run until `should_stop` returns `1` */
+/* Run until `is_anyone_dead` or `are_all_done` returns `1` */
 void	*obs_routine(void *arg)
 {
 	t_ctx	*ctx;
@@ -56,7 +75,12 @@ void	*obs_routine(void *arg)
 	ctx = (t_ctx *)arg;
 	while (1)
 	{
-		if (should_stop(ctx) == 1)
+		if (ctx->max_loops > 0)
+		{
+			if (are_all_done(ctx) == 1)
+				break ;
+		}
+		if (is_anyone_dead(ctx) == 1)
 			break ;
 	}
 	return (NULL);

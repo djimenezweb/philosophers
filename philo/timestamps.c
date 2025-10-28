@@ -19,6 +19,8 @@ void	safe_print(t_ctx *ctx, int id, char *str)
 {
 	long	time_diff;
 
+	if (get_stop_value(ctx) == 1)
+		return ;
 	pthread_mutex_lock(&ctx->safe_print_mtx);
 	time_diff = get_current_ms() - ctx->start_time;
 	printf("%ld %d %s\n", time_diff, id, str);

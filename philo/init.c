@@ -12,6 +12,27 @@
 
 #include "philosophers.h"
 
+/* Destroy initialized mutexes and free allocated memory */
+void	cleanup(t_ctx *ctx)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	n = ctx->n;
+	while (i < n)
+	{
+		pthread_mutex_destroy(&ctx->philo_arr[i].fork_mtx);
+		pthread_mutex_destroy(&ctx->philo_arr[i].last_lunch_mtx);
+		i++;
+	}
+	free(ctx->philo_arr);
+	pthread_mutex_destroy(&ctx->stop_mtx);
+	pthread_mutex_destroy(&ctx->start_mtx);
+	pthread_mutex_destroy(&ctx->safe_print_mtx);
+	ctx->philo_arr = NULL;
+}
+
 /* - Assign `id` and reference to `ctx` to each philosopher
 - Set `last_lunch` to current time
 - Initalize `fork_mtx` mutex
@@ -25,7 +46,7 @@ t_philo	init_philo(t_ctx *ctx, int id)
 	p.ctx = ctx;
 	p.last_lunch = get_current_ms();
 	p.loop = 0;
-	p.done = 1;
+	p.done = 0;
 	pthread_mutex_init(&p.fork_mtx, NULL);
 	pthread_mutex_init(&p.last_lunch_mtx, NULL);
 	return (p);
@@ -61,10 +82,12 @@ int	init_config(t_ctx *ctx, int argc, char *argv[])
 	ctx->tt_die = ft_atoi(argv[2]);
 	ctx->tt_eat = ft_atoi(argv[3]);
 	ctx->tt_sleep = ft_atoi(argv[4]);
+	ctx->max_loops = -1;
 	if (argc == 6)
 		ctx->max_loops = ft_atoi(argv[5]);
-	else
-		ctx->max_loops = -1;
+	ctx->delay = ctx->tt_eat;
+	if (ctx->tt_eat > ctx->tt_sleep)
+		ctx->delay = ctx->tt_sleep;
 	ctx->philo_arr = init_philo_array(ctx);
 	if (!ctx->philo_arr)
 		return (-1);
