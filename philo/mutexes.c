@@ -12,6 +12,20 @@
 
 #include "philosophers.h"
 
+/* Take fork (lock mutex) */
+void	take_fork(pthread_mutex_t *fork, t_ctx *ctx, int id)
+{
+	pthread_mutex_lock(fork);
+	safe_print(ctx, id, TAKE_FORK);
+}
+
+/* Put down fork (unlock mutex) */
+void	put_down_forks(pthread_mutex_t *forks[])
+{
+	pthread_mutex_unlock(forks[LEFT]);
+	pthread_mutex_unlock(forks[RIGHT]);
+}
+
 /* - Read mutex-protected `stop` and return it */
 int	get_stop_value(t_ctx *ctx)
 {
