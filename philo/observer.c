@@ -52,7 +52,7 @@ int	is_anyone_dead(t_ctx *ctx)
 	{
 		pthread_mutex_lock(&ctx->philo_arr[i].last_lunch_mtx);
 		time_diff = get_current_ms() - ctx->philo_arr[i].last_lunch;
-		if (time_diff > ctx->tt_die)
+		if (!ctx->philo_arr[i].done && time_diff > ctx->tt_die)
 		{
 			pthread_mutex_unlock(&ctx->philo_arr[i].last_lunch_mtx);
 			safe_print(ctx, ctx->philo_arr[i].id, DIE);
@@ -75,11 +75,8 @@ void	*obs_routine(void *arg)
 	ctx = (t_ctx *)arg;
 	while (1)
 	{
-		if (ctx->max_loops > 0)
-		{
-			if (are_all_done(ctx) == 1)
-				break ;
-		}
+		if (ctx->max_loops > 0 && are_all_done(ctx) == 1)
+			break ;
 		if (is_anyone_dead(ctx) == 1)
 			break ;
 	}

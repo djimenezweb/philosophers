@@ -14,7 +14,7 @@
 
 /* - Create observer thread
 - Create one thread per philosopher
-- ??? Set starting time after they are all created ???
+- Set `start` flag after they are all created
 - Wait for philosopher and observer threads to finish
 - Call `cleanup` if thread creation or join fails */
 void	create_threads(t_ctx *ctx)

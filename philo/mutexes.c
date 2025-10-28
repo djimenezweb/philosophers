@@ -26,7 +26,7 @@ void	put_down_forks(pthread_mutex_t *forks[])
 	pthread_mutex_unlock(forks[RIGHT]);
 }
 
-/* - Read mutex-protected `stop` and return it */
+/* Read mutex-protected `stop` and return it */
 int	get_stop_value(t_ctx *ctx)
 {
 	return (get_mutex_value(&ctx->stop_mtx, &ctx->stop));

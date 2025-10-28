@@ -74,7 +74,7 @@ t_philo	*init_philo_array(t_ctx *ctx)
 
 /* - Initialize `t_ctx` structure
 - Initialize array of philosophers 
-- Initialize `stop_mtx` and `safe_print_mtx` mutexes
+- Initialize `stop_mtx`, `start_mtx` and `safe_print_mtx` mutexes
 - Return `0` on success, `-1` on error*/
 int	init_config(t_ctx *ctx, int argc, char *argv[])
 {

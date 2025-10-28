@@ -27,7 +27,7 @@ void	safe_print(t_ctx *ctx, int id, char *str)
 	pthread_mutex_unlock(&ctx->safe_print_mtx);
 }
 
-/* Return current Epoch time in milliseconds */
+/* Return current time in milliseconds */
 long	get_current_ms(void)
 {
 	struct timeval	tv;
@@ -57,7 +57,7 @@ void	sleep_ms(int time_ms)
 	{
 		time_diff = get_current_ms() - start;
 		if (time_diff >= (long)time_ms)
-			break;
+			break ;
 		if ((time_ms - time_diff) > 5)
 			usleep(2000);
 		else
