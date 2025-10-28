@@ -76,7 +76,7 @@ int		get_mutex_value(pthread_mutex_t *mtx, int *ptr);
 void	*philo_routine(void *arg);
 void	safe_print(t_ctx *ctx, int id, char *str);
 long	get_current_ms(void);
-void	sleep_ms(int ms);
+void	sleep_ms(int time_ms);
 int		ft_atoi(const char *str);
 int		arg_validation(int argc, char *argv[]);
 

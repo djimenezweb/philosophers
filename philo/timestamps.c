@@ -37,7 +37,30 @@ long	get_current_ms(void)
 }
 
 /* Suspend execution for an interval in milliseconds */
-void	sleep_ms(int ms)
+/* void	sleep_ms(int time_ms)
 {
 	usleep(ms * 1000);
+} */
+
+/* Suspend execution for an interval `time_ms` in milliseconds.
+Accurate version: Sleeps in intervals of 2 milliseconds
+(or 0.5ms if less than 5ms remain) until `time_ms` have passed.
+Why an accurate version? `usleep()` is not perfectly precise,
+it can sleep longer than requested due to OS scheduling. */
+void	sleep_ms(int time_ms)
+{
+	long	start;
+	long	time_diff;
+
+	start = get_current_ms();
+	while (1)
+	{
+		time_diff = get_current_ms() - start;
+		if (time_diff >= (long)time_ms)
+			break;
+		if ((time_ms - time_diff) > 5)
+			usleep(2000);
+		else
+			usleep(500);
+	}
 }
