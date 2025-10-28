@@ -66,7 +66,7 @@ void	eat(t_philo *p)
 }
 
 // TODO: Retrasar filósofos pares o filósofo 3 si total 3
-/* - Wait 10 microseconds until `start` is set to `1`
+/* - Wait in 100 microsecond increments until `start` is set to `1`
 - Run until `stop` returns `1`
 - Hold even philosophers to let the odd ones start before
 - Call `eat`, `sleep` and `think` subroutines */
@@ -76,7 +76,8 @@ void	*philo_routine(void *arg)
 
 	p = (t_philo *)arg;
 	while (get_mutex_value(&p->ctx->start_mtx, &p->ctx->start) == 0)
-		usleep(10);
+		usleep(100);
+		
 /* 	if (p->ctx->n == 1)
 	{
 		single_philo(&p->fork_mtx, p->ctx);
@@ -88,6 +89,9 @@ void	*philo_routine(void *arg)
 	if (p->id % 2 != 0 && p->id == p->ctx->n)
 		usleep(100); */
 
+	if (p->id % 2 == 0)
+		sleep_ms(p->ctx->tt_eat - 1);
+
 	while (get_stop_value(p->ctx) == 0)
 	{
 		eat(p);
@@ -98,6 +102,8 @@ void	*philo_routine(void *arg)
 		if (get_stop_value(p->ctx) == 1)
 			break ;
 		safe_print(p->ctx, p->id, THINK);
+		/* if (p->ctx->n % 2 == 0)
+			sleep_ms(1); */
 	}
 	return (NULL);
 }
