@@ -31,6 +31,12 @@ int	get_stop_value(t_ctx *ctx)
 	return (get_mutex_value(&ctx->stop_mtx, &ctx->stop));
 }
 
+/* Read mutex-protected `start` value */
+int	get_start_value(t_ctx *ctx)
+{
+	return (get_mutex_value(&ctx->start_mtx, &ctx->start));
+}
+
 /* Return mutex-protected int `value` */
 int	get_mutex_value(pthread_mutex_t *mtx, int *ptr)
 {

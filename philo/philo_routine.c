@@ -13,12 +13,13 @@
 #include "philosophers.h"
 
 /* If there's a single philosopher he takes fork and dies */
-void	single_philo(pthread_mutex_t *fork, t_ctx *ctx)
+// single_philo(&p->fork_mtx, p->ctx)
+void	single_philo(t_philo *p)
 {
-	pthread_mutex_lock(fork);
-	safe_print(ctx, 1, TAKE_FORK);
-	pthread_mutex_unlock(fork);
-	sleep_ms(ctx->tt_die);
+	pthread_mutex_lock(&p->fork_mtx);
+	safe_print(p->ctx, 1, TAKE_FORK);
+	pthread_mutex_unlock(&p->fork_mtx);
+	sleep_ms(p->ctx->tt_die);
 }
 
 /* - Every philosopher takes their right fork, except for the last one,
@@ -50,7 +51,7 @@ void	eat(t_philo *p)
 {
 	pthread_mutex_t	*forks[2];
 
-	if (get_stop_value(p->ctx) == 1)
+	if (get_stop_value(p->ctx) == STOP)
 		return ;
 	take_forks(p, forks);
 	safe_print(p->ctx, p->id, EAT);
@@ -65,45 +66,32 @@ void	eat(t_philo *p)
 	pthread_mutex_unlock(forks[RIGHT]);
 }
 
-//TODO: POSIBLES APORTACIONES
-/* Retrasar filósofo nº 3 si total 3
-
-	if (p->id % 2 == 0 || (p->ctx->n == 3 && p->id == 3))
-		sleep_ms(p->ctx->delay - 10);
-
-	if (p->id % 2 != 0 && p->id == p->ctx->n)
-		usleep(100); 
-
-	Añadir retraso 1 ms al final sólo pares
-	if (p->ctx->n % 2 == 0)
-		sleep_ms(1);
-*/
-
 /* - Wait in 100 microsecond increments until `start` is set to `1`
 - Run until `stop` returns `1`
 - Hold even philosophers to let the odd ones start before
-- Call `eat`, `sleep` and `think` subroutines */
+- Call `eat`, `sleep` and `think` subroutines
+- If uneven number of philosophers, sleep 1ms at the end */
 void	*philo_routine(void *arg)
 {
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-	while (get_mutex_value(&p->ctx->start_mtx, &p->ctx->start) == 0)
+	while (get_start_value(p->ctx) == 0)
 		usleep(100);
 	if (p->ctx->n == 1)
-		return (single_philo(&p->fork_mtx, p->ctx), NULL);
+		return (single_philo(p), NULL);
 	if (p->id % 2 == 0)
 		sleep_ms(p->ctx->tt_eat - 1);
-	while (get_stop_value(p->ctx) == 0)
+	while (get_stop_value(p->ctx) == CONTINUE)
 	{
-		if (p->done)
+		if (get_done_value(p) == DONE)
 			break ;
 		eat(p);
-		if (get_stop_value(p->ctx) == 1)
+		if (get_stop_value(p->ctx) == STOP)
 			break ;
 		safe_print(p->ctx, p->id, SLEEP);
 		sleep_ms(p->ctx->tt_sleep);
-		if (get_stop_value(p->ctx) == 1)
+		if (get_stop_value(p->ctx) == STOP)
 			break ;
 		safe_print(p->ctx, p->id, THINK);
 		if (p->ctx->n % 2 != 0)

@@ -22,6 +22,9 @@
 
 # define LEFT 0
 # define RIGHT 1
+# define STOP 1
+# define DONE 1
+# define CONTINUE 0
 # define TAKE_FORK "has taken a fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
@@ -66,11 +69,12 @@ void	create_threads(t_ctx *ctx);
 void	take_fork(pthread_mutex_t *fork, t_ctx *ctx, int id);
 int		get_done_value(t_philo *p);
 int		get_stop_value(t_ctx *ctx);
+int		get_start_value(t_ctx *ctx);
 int		get_mutex_value(pthread_mutex_t *mtx, int *ptr);
 int		are_all_done(t_ctx *ctx);
 int		is_anyone_dead(t_ctx *ctx);
 void	*obs_routine(void *arg);
-void	single_philo(pthread_mutex_t *fork, t_ctx *ctx);
+void	single_philo(t_philo *p);
 void	take_forks(t_philo *p, pthread_mutex_t *forks[]);
 void	eat(t_philo *p);
 void	*philo_routine(void *arg);
