@@ -36,12 +36,6 @@ long	get_current_ms(void)
 	return ((long)tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-/* Suspend execution for an interval in milliseconds */
-/* void	sleep_ms(int time_ms)
-{
-	usleep(ms * 1000);
-} */
-
 /* Suspend execution for an interval `time_ms` in milliseconds.
 Accurate version: Sleeps in intervals of 2 milliseconds
 (or 0.5ms if less than 5ms remain) until `time_ms` have passed.

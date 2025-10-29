@@ -17,7 +17,6 @@ SRCS	=	init.c main.c mutexes.c observer.c philo_routine.c timestamps.c\
 			validation.c
 OBJDIR	=	objs
 OBJS	=	$(addprefix $(OBJDIR)/,$(SRCS:.c=.o))
-ARGS	=	5 1000 400 200 4
 
 all : $(NAME)
 
@@ -31,18 +30,10 @@ $(OBJDIR)/%.o : %.c
 clean :
 	rm -f $(OBJS)
 	rmdir $(OBJDIR)
-	clear
 
 fclean : clean
 	rm -f $(NAME)
 
 re : fclean all
 
-run : $(NAME)
-	@echo 'make run ARGS="$(ARGS)"'
-	./$(NAME) $(ARGS)
-
-check : $(NAME)
-	valgrind --leak-check=full ./$(NAME) $(ARGS)
-
-.PHONY : all clean fclean re run check
+.PHONY : all clean fclean re

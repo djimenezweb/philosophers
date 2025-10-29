@@ -13,7 +13,6 @@
 #include "philosophers.h"
 
 /* If there's a single philosopher he takes fork and dies */
-// single_philo(&p->fork_mtx, p->ctx)
 void	single_philo(t_philo *p)
 {
 	pthread_mutex_lock(&p->fork_mtx);
@@ -69,7 +68,6 @@ void	eat(t_philo *p)
 /* - Wait in 100 microsecond increments until `start` is set to `1`
 - Run until `stop` returns `1`
 - Hold even philosophers to let the odd ones start before
-- Call `eat`, `sleep` and `think` subroutines
 - If uneven number of philosophers, sleep 1ms at the end */
 void	*philo_routine(void *arg)
 {
