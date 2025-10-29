@@ -106,6 +106,8 @@ void	*philo_routine(void *arg)
 		if (get_stop_value(p->ctx) == 1)
 			break ;
 		safe_print(p->ctx, p->id, THINK);
+		if (p->ctx->n % 2 != 0)
+			sleep_ms(1);
 	}
 	return (NULL);
 }
